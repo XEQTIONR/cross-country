@@ -14,11 +14,13 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->string('order_num')->primary();
+            $table->id('order_num');
             $table->foreignId('customer_id');
             $table->decimal('discount_percentage', 5, 2)->default(0);
-            $table->decimal('discount_amount', 5, 2)->default(0);
-            $table->date('order_date')->nullable();
+            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->decimal('tax_percentage', 5, 2)->default(0);
+            $table->decimal('tax_amount', 10, 2)->default(0);
+            $table->date('order_date');
             $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -23,14 +23,17 @@ class CreateLCSTable extends Migration
             $table->decimal('foreign_amount', 10, 2)->default(0);
             $table->decimal('foreign_expense', 10, 2)->default(0);
             $table->decimal('domestic_expense', 10, 2)->default(0);
-            $table->decimal('exchange_rate', 5, 2)->default(0);
+            $table->float('exchange_rate')->default(0);
             $table->string('port_depart', 30);
             $table->string('port_arrive', 30);
-            $table->string('invoice_num', 30);
-            $table->text('notes');
+            $table->string('invoice_num', 30)->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
+
+        // Hack - because float columns in migrations dont work on MySQL 5.7
+        \Illuminate\Support\Facades\DB::statement('ALTER TABLE lcs MODIFY exchange_rate FLOAT');
     }
 
     /**

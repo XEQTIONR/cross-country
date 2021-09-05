@@ -15,14 +15,14 @@ class CreateOrderReturnsTable extends Migration
     {
         Schema::create('order_returns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_content_id');
+            $table->foreignId('container_content_id');
             $table->integer('qty')->default(1);
             $table->decimal('unit_price', 10, 2);
             $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('order_content_id')->references('id')->on('order_contents')
+            $table->foreign('container_content_id')->references('id')->on('container_contents')
                 ->onDelete('restrict');
         });
     }

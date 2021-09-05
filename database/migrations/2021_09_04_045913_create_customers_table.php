@@ -18,7 +18,7 @@ class CreateCustomersTable extends Migration
             $table->string('name', 50);
             $table->text('address');
             $table->string('phone', 15);
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

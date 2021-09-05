@@ -15,7 +15,7 @@ class CreateOrderContentsTable extends Migration
     {
         Schema::create('order_contents', function (Blueprint $table) {
             $table->id();
-            $table->string('order_num');
+            $table->foreignId('order_num');
             $table->foreignId('container_content_id');
             $table->integer('qty')->default(1);
             $table->decimal('unit_price', 10, 2);

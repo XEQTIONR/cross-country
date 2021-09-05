@@ -26,6 +26,8 @@ class CreateConsignmentsTable extends Migration
             $table->foreign('lc_num')->references('lc_num')->on('lcs')
                 ->onDelete('restrict');
         });
+        // Hack - because float columns in migrations dont work on MySQL 5.7
+        \Illuminate\Support\Facades\DB::statement('ALTER TABLE consignments MODIFY exchange_rate FLOAT');
     }
 
     /**

@@ -16,12 +16,11 @@ class CreateWasteTable extends Migration
         Schema::create('waste', function (Blueprint $table) {
             $table->id();
             $table->foreignId('container_content_id');
-            $table->foreignId('tyre_id');
             $table->integer('qty');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('tyre_id')->references('id')->on('tyres')
+            $table->foreign('container_content_id')->references('id')->on('container_contents')
                 ->onDelete('restrict');
         });
     }

@@ -15,7 +15,7 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('order_num');
+            $table->foreignId('order_num');
             $table->decimal('payment_amount', 10, 2);
             $table->decimal('refund_amount', 10, 2)->default(0);
             $table->json('meta')->nullable();
