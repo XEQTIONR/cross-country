@@ -20,6 +20,7 @@ class OrderResource extends JsonResource
             'customer'              => new CustomerResource($this->whenLoaded('customer')),
             'contents'              => OrderContentResource::collection($this->contents),
             'returns'               => OrderReturnResource::collection($this->returns),
+            'payments'              => PaymentResource::collection($this->whenLoaded('payments')),
             'discountPercentage'    => $this->discount_percentage,
             'discountAmount'        => $this->discount_amount,
             'taxPercentage'         => $this->tax_percentage,

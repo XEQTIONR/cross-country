@@ -10,8 +10,13 @@ class Payment extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'payment_amount' => 'float',
+        'refund_amount' => 'float',
+    ];
+
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'order_num');
     }
 }

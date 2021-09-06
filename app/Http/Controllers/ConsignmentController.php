@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ConsignmentResource;
 use App\Models\Consignment;
-use App\Http\Controllers\Api\ConsignmentController as ApiController;
+use App\Http\Controllers\Api\ConsignmentController as Controller;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ConsignmentController extends ApiController
+class ConsignmentController extends Controller
 {
     /**
      * Display a listing of the resource.

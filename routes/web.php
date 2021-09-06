@@ -4,7 +4,9 @@ use App\Http\Controllers\ConsignmentController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\LcController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TyreController;
+use App\Http\Controllers\WasteController;
 use Illuminate\Support\Facades\Route;
 use TCG\Voyager\Facades\Voyager;
 /*
@@ -28,9 +30,15 @@ Route::resource('consignments', ConsignmentController::class);
 
 Route::resource('containers', ContainerController::class);
 
+Route::resource('customers', \App\Http\Controllers\CustomerController::class);
+
 Route::resource('orders', OrderController::class);
 
+Route::resource('payments', PaymentController::class);
+
 Route::resource('tyres', TyreController::class);
+
+Route::resource('waste', WasteController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

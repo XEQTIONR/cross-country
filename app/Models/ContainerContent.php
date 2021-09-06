@@ -30,4 +30,9 @@ class ContainerContent extends Model
     {
         return $this->hasMany(OrderContent::class, 'container_content_id');
     }
+
+    public function waste()
+    {
+        return $this->hasMany(Waste::class);
+    }
 }

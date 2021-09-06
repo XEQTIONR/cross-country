@@ -6,9 +6,9 @@ use App\Http\Resources\ContainerResource;
 use App\Models\Container;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Http\Controllers\Api\ContainerController as ApiController;
+use App\Http\Controllers\Api\ContainerController as Controller;
 
-class ContainerController extends ApiController
+class ContainerController extends Controller
 {
     /**
      * Display a listing of the resource.

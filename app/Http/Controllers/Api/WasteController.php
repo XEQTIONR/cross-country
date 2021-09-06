@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CustomerResource;
-use App\Http\Resources\OrderResource;
-use App\Models\Customer;
-use App\Models\Order;
+use App\Http\Resources\WasteResource;
+use App\Models\Waste;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class OrderController extends Controller
+class WasteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-       return OrderResource::collection(Order::with('contents', 'customer', 'payments')->get());
+        return WasteResource::collection(Waste::with('containerContent')->get());
     }
 
     /**
@@ -36,12 +34,12 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Order $order
-     * @return OrderResource
+     * @param  Waste $waste
+     * @return WasteResource
      */
-    public function show(Order $order)
+    public function show(Waste $waste)
     {
-        return new OrderResource($order->load('customer', 'contents.containerContent', 'payments'));
+        return new WasteResource($waste->load('containerContent'));
     }
 
     /**

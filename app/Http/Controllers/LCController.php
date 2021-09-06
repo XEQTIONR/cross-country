@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\LcResource;
-use App\Http\Controllers\Api\LcController as ApiController;
+use App\Http\Controllers\Api\LcController as Controller;
 use App\Models\Lc;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class LcController extends ApiController
+class LcController extends Controller
 {
     /**
      * Display a listing of the resource.
