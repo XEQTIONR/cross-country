@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\LC;
+use App\Models\Lc;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class LCFactory extends Factory
+class LcFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = LC::class;
+    protected $model = Lc::class;
 
     /**
      * Define the model's default state.

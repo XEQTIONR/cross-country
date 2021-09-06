@@ -1,0 +1,36 @@
+INSERT INTO cross_country.lcs (lc_num, date_issued, date_expiry, applicant, beneficiary, currency_code, foreign_amount, foreign_expense, domestic_expense, exchange_rate, port_depart, port_arrive, invoice_num, notes, created_at, updated_at) SELECT * FROM cross_country_prod.lcs;
+
+INSERT INTO cross_country.consignments(bol, lc_num, value, exchange_rate, tax, land_date, created_at, updated_at) SELECT BOL, lc, value, exchange_rate, tax, land_date, created_at, updated_at FROM cross_country_prod.consignments;
+
+
+INSERT INTO cross_country.containers(container_num, bol, created_at, updated_at) SELECT * FROM cross_country_prod.consignment_containers;
+
+INSERT INTO cross_country.tyres(id, brand, size, lisi, pattern, created_at, updated_at) SELECT * FROM cross_country_prod.tyres;
+
+
+INSERT INTO cross_country.customers(id, name, address, phone, notes, created_at, updated_at) SELECT * FROM cross_country_prod.customers;
+
+INSERT INTO cross_country.orders(order_num, customer_id, discount_percentage, discount_amount, tax_percentage, tax_amount, created_at, updated_at, order_date) SELECT Order_num, customer_id, discount_percent, discount_amount, tax_percentage, tax_amount, created_at, updated_at, order_on FROM cross_country_prod.orders;
+
+INSERT INTO cross_country.payments (id, order_num, payment_amount, refund_amount, created_at, updated_at) SELECT transaction_id, Order_num, payment_amount, refund_amount, created_at, updated_at FROM cross_country_prod.payments;
+
+INSERT INTO cross_country.proforma_invoices(lc_num, tyre_id, qty, unit_price, created_at, updated_at) SELECT * FROM cross_country_prod.performa_invoices;
+
+INSERT INTO cross_country.consignment_expenses(id, bol, expense_foreign, expense_local, notes, created_at, updated_at) SELECT expense_id, BOL, expense_foreign, expense_local, expense_notes, created_at, updated_at FROM cross_country_prod.consignment_expenses;
+
+
+INSERT INTO cross_country.container_contents(container_num, tyre_id, qty, unit_price, total_tax, total_weight, created_at, updated_at) SELECT Container_num, tyre_id, qty, unit_price, total_tax, total_weight, created_at, updated_at FROM cross_country_prod.container_contents;
+
+INSERT INTO cross_country.order_contents (order_num, container_content_id, qty, unit_price, created_at, updated_at) SELECT O.Order_num, C.id, O.qty, O.unit_price, O.created_at, O.updated_at FROM cross_country_prod.order_contents O, cross_country.container_contents C WHERE O.container_num = C.container_num AND O.tyre_id = C.tyre_id;
+
+
+
+INSERT INTO cross_country.order_returns(id, order_num, container_content_id, qty, unit_price, created_at, updated_at)SELECT R.id, R.order_num, C.id, R.qty, R.unit_price, R.created_at, R.updated_at
+FROM cross_country_prod.returns R, cross_country.container_contents C
+WHERE R.container_num = C.container_num AND R.tyre_id = C.tyre_id;
+
+
+INSERT INTO cross_country.waste(id, container_content_id, qty, created_at, updated_at)
+SELECT W.id, C.id, W.qty, W.created_at, W.updated_at
+FROM cross_country.container_contents C, cross_country_prod.waste W
+WHERE W.Container_num = C.container_num AND W.tyre_id = C.tyre_id;
