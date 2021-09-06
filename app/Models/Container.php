@@ -13,6 +13,10 @@ class Container extends Model
 
     protected $primaryKey = 'container_num';
 
+    protected $casts = [
+        'container_num' => 'string',
+    ];
+
     public function consignment(): BelongsTo
     {
         return $this->belongsTo(Consignment::class, 'bol');

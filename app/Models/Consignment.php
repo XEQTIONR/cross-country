@@ -13,6 +13,17 @@ class Consignment extends Model
 
     protected $primaryKey = 'bol';
 
+    protected $casts = [
+        'bol'   => 'string',
+        'lc_num'=> 'string',
+        'value' => 'float',
+        'tax'   => 'float',
+    ];
+
+    protected $dates = [
+        'land_date',
+    ];
+
     public function lc(): BelongsTo
     {
         return $this->belongsTo(Lc::class, 'lc_num');

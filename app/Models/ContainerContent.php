@@ -10,6 +10,12 @@ class ContainerContent extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'unit_price'   => 'float',
+        'total_tax'    => 'float',
+        'total_weight' => 'float',
+    ];
+
     public function container(): BelongsTo
     {
         return $this->belongsTo(Container::class, 'container_num');
@@ -18,5 +24,10 @@ class ContainerContent extends Model
     public function tyre(): BelongsTo
     {
         return $this->belongsTo(Tyre::class);
+    }
+
+    public function orderContents()
+    {
+        return $this->hasMany(OrderContent::class, 'container_content_id');
     }
 }

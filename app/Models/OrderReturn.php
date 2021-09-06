@@ -10,8 +10,17 @@ class OrderReturn extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+      'unit_price' => 'float'
+    ];
+
     public function containerContent(): BelongsTo
     {
         return $this->belongsTo(ContainerContent::class);
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'order_num');
     }
 }

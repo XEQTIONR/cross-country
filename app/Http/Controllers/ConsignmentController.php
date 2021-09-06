@@ -2,9 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\ConsignmentResource;
+use App\Models\Consignment;
+use App\Http\Controllers\Api\ConsignmentController as ApiController;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class ConsignmentController extends Controller
+class ConsignmentController extends ApiController
 {
-    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return AnonymousResourceCollection
+     */
+    public function index()
+    {
+        return parent::index();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Consignment $consignment
+     * @return ConsignmentResource
+     */
+    public function show(Consignment $consignment)
+    {
+        return parent::show($consignment);
+    }
 }

@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\ConsignmentController;
+use App\Http\Controllers\ContainerController;
+use App\Http\Controllers\LcController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TyreController;
 use Illuminate\Support\Facades\Route;
 use TCG\Voyager\Facades\Voyager;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,6 +21,16 @@ use TCG\Voyager\Facades\Voyager;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('lcs', LcController::class);
+
+Route::resource('consignments', ConsignmentController::class);
+
+Route::resource('containers', ContainerController::class);
+
+Route::resource('orders', OrderController::class);
+
+Route::resource('tyres', TyreController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
