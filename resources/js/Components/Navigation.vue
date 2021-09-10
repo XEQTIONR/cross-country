@@ -1,16 +1,15 @@
 <template>
-    <div class="h-screen bg-yellow-300 w-1/4">
-        <ul>
+    <div class="h-screen">
+        <ul class="">
             <li
-                class="flex flex-row justify-start items-center p-3.5"
+                class="flex flex-row justify-start items-center py-5 px-10"
                 v-for="item in listItems"
             >
                 <icon
-                    class="mr-2"
-                    :icon="item.icon"
+                    class="mr-4 text-2xl"
+                    :icon="item.icon_class"
                 />
-                {{item.title}}
-
+                <span class="text-sm font-normal whitespace-nowrap">{{item.title}}</span>
             </li>
         </ul>
     </div>
@@ -22,22 +21,13 @@ export default {
     components: {Icon},
     props: {
         items : {
-            type : Array,
-            default : []
+            type : Object,
+            default : {}
         }
     },
-    data() {
-        return {
-            listItems : [
-                { title: 'Letters of Credit', icon: 'anchor' },
-                { title: 'Consignments', icon: 'anchor' },
-                { title: 'Orders', icon: 'box' },
-                { title: 'Payments', icon: 'cash' },
-                { title: 'Products', icon: 'disc' },
-                { title: 'Customers', icon: 'store' },
-                { title: 'Reports', icon: 'container' },
-                { title: 'Users', icon: 'cash' },
-            ]
+    computed: {
+        listItems(){
+            return Object.values(this.items).sort((first, second) => first.order - second.order);
         }
     }
 }
