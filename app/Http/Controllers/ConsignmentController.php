@@ -5,18 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ConsignmentResource;
 use App\Models\Consignment;
 use App\Http\Controllers\Api\ConsignmentController as Controller;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ConsignmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return Response
      */
     public function index()
     {
-        return parent::index();
+        return  Inertia::render('Consignments', [ 'consignments' => parent::index() ] );
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\OrderResource;
 use App\Models\Tyre;
 use App\Http\Controllers\Api\TyreController as Controller;
+use Inertia\Inertia;
 
 class TyreController extends Controller
 {
@@ -14,9 +15,9 @@ class TyreController extends Controller
      */
     public function index()
     {
-        return parent::index();
-    }
+        return Inertia::render('Tyres', ['tyres' => parent::index()]);
 
+    }
     /**
      * Display the specified resource.
      *
