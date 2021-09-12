@@ -16,7 +16,7 @@ class LcController extends Controller
      */
     public function index()
     {
-        return LcResource::collection(Lc::with('consignments')->get());
+        return LcResource::collection(Lc::with('consignments')->orderByDesc('created_at')->get());
     }
 
     /**

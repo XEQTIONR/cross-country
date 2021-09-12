@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Controllers\Api\LcController as Controller;
+use App\Models\Lc;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,6 +16,8 @@ class LcController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Lcs', ['lcs' => parent::index()]);
+        return Inertia::render('Lcs', [
+            'lcs' => parent::index(), 'title' => 'Letters of Credit',
+        ]);
     }
 }

@@ -16,8 +16,8 @@ class LcResource extends JsonResource
     {
         return [
             'lc_num'            => $this->lc_num,
-            'dateIssued'        => $this->date_issued,
-            'dateExpiry'        => $this->date_expiry,
+            'dateIssued'        => $this->date_issued->toDateString(),
+            'dateExpiry'        => $this->date_expiry->toDateString(),
             'applicant'         => $this->applicant,
             'beneficiary'       => $this->beneficiary,
             'currencyCode'      => $this->currency_code,
@@ -29,7 +29,7 @@ class LcResource extends JsonResource
             'portArrive'        => $this->port_arrive,
             'invoiceNumber'     => $this->invoice_num,
             'notes'             => $this->notes,
-            'createdAt'         => $this->created_at,
+            'createdAt'         => $this->created_at->toDateString(),
             'consignments'      => ConsignmentResource::collection($this->whenLoaded('consignments')),
         ];
     }

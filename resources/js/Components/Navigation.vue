@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen">
+    <div class="h-screen  bg-gray-200">
         <ul class="">
             <li
                 class="flex flex-row justify-start items-center py-5 px-10"
