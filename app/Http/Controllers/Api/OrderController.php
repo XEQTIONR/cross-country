@@ -7,8 +7,11 @@ use App\Http\Resources\CustomerResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderContent;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -19,7 +22,17 @@ class OrderController extends Controller
      */
     public function index()
     {
-       return OrderResource::collection(Order::with('contents', 'customer', 'payments')->get());
+        return OrderResource::collection(Order::with('customer')
+            ->addSelect([
+                'subTotal' => OrderContent::selectRaw('SUM(qty * unit_price) AS asubtotal')
+                    ->whereColumn('order_num', 'orders.order_num')
+                    ->groupBy('order_num')
+                    ->limit(1),
+                'paymentsTotal' => Payment::select(DB::raw('SUM(payments.payment_amount - payments.refund_amount)'))
+                    ->whereColumn('order_num', 'orders.order_num')
+                    ->groupBy('order_num')
+                    ->limit(1),
+        ])->get());
     }
 
     /**

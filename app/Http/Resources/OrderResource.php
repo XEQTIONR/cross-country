@@ -15,17 +15,19 @@ class OrderResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'order_num'             => $this->order_num,
-            'date'                  => $this->order_date,
-            'customer'              => new CustomerResource($this->whenLoaded('customer')),
-            'contents'              => OrderContentResource::collection($this->contents),
-            'returns'               => OrderReturnResource::collection($this->returns),
-            'payments'              => PaymentResource::collection($this->whenLoaded('payments')),
-            'discountPercentage'    => $this->discount_percentage,
-            'discountAmount'        => $this->discount_amount,
-            'taxPercentage'         => $this->tax_percentage,
-            'taxAmount'             => $this->tax_amount,
-            'createdAt'             => $this->created_at,
+            'order_num'          => $this->order_num,
+            'createdAt'          => $this->created_at,
+            'date'               => $this->order_date,
+            'discountAmount'     => $this->discount_amount,
+            'discountPercentage' => $this->discount_percentage,
+            'customer'           => new CustomerResource($this->whenLoaded('customer')),
+            'contents'           => OrderContentResource::collection($this->whenLoaded('contents')),
+            'payments'           => PaymentResource::collection($this->whenLoaded('payments')),
+            'paymentsTotal'      => floatval($this->paymentsTotal),
+            'returns'            => OrderReturnResource::collection($this->whenLoaded('returns')),
+            'subTotal'           => floatval($this->subTotal),
+            'taxAmount'          => $this->tax_amount,
+            'taxPercentage'      => $this->tax_percentage,
         ];
     }
 }
