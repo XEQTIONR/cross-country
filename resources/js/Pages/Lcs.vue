@@ -45,6 +45,11 @@ export default {
         title: {
             type: String,
             default: 'Dashboard',
+        },
+
+        totals: {
+            type: Object,
+            default: {}
         }
     },
 
@@ -73,10 +78,6 @@ export default {
             textRight: [
                 'foreignAmount', 'domesticAmount', 'exchangeRate', 'totalExpense',
             ],
-
-            totals: [
-                'foreignAmount', 'domesticAmount', 'totalExpense',
-            ],
         }
     },
 
@@ -85,9 +86,7 @@ export default {
         rows() {
              return this.lcs.data.map((item) => {
                  item.totalExpense = (item.domesticExpense + (item.foreignExpense*item.exchangeRate));
-                 item.exchangeRate = item.exchangeRate;
                  item.domesticAmount = (item.foreignAmount* item.exchangeRate);
-                 item.foreignAmount = item.foreignAmount;
                  return item;
              });
         },

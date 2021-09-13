@@ -7,16 +7,30 @@ use App\Http\Resources\LcResource;
 use App\Models\Lc;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class LcController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return AnonymousResourceCollection
+     * @return array
      */
     public function index()
     {
-        return LcResource::collection(Lc::with('consignments')->orderByDesc('created_at')->get());
+        return [
+            'lcs' => LcResource::collection(Lc::with('consignments')
+                ->orderByDesc('created_at')->get()),
+
+            'totals' => DB::table(with(new Lc)->getTable())
+                ->select(
+                    DB::raw('SUM(foreign_amount) as foreignAmount,
+                    SUM(foreign_amount * exchange_rate) AS domesticAmount,
+                    SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense
+                    '
+                    )
+                )
+                ->first()
+        ];
     }
 
     /**

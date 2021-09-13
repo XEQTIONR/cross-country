@@ -7,17 +7,25 @@ use App\Http\Resources\ConsignmentResource;
 use App\Models\Consignment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class ConsignmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return array
      */
     public function index()
     {
-        return ConsignmentResource::collection(Consignment::with('containers')->get());
+        return [
+            'consignments' => ConsignmentResource::collection(Consignment::all()),
+            'totals' => DB::table(with(new Consignment)->getTable())
+                ->select(
+                    DB::raw('SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value')
+                )
+                ->first()
+        ];
     }
 
     /**

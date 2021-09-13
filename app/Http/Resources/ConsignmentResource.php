@@ -20,8 +20,8 @@ class ConsignmentResource extends JsonResource
             'value'         => $this->value,
             'exchange_rate' => $this->exchange_rate,
             'tax'           => $this->tax,
-            'land_date'     => $this->land_date,
-            'created_at'    => $this->created_at,
+            'land_date'     => $this->land_date->toDateString(),
+            'created_at'    => $this->created_at->toDateString(),
             'containers'    => ContainerResource::collection($this->whenLoaded('containers'))
         ];
     }

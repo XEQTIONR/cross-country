@@ -16,8 +16,12 @@ class LcController extends Controller
      */
     public function index()
     {
+        $data = parent::index();
+
         return Inertia::render('Lcs', [
-            'lcs' => parent::index(), 'title' => 'Letters of Credit',
+            'lcs' => $data['lcs'],
+            'title' => 'Letters of Credit',
+            'totals' => $data['totals'],
         ]);
     }
 }
