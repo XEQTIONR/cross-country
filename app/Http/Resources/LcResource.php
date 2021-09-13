@@ -16,21 +16,23 @@ class LcResource extends JsonResource
     {
         return [
             'lc_num'            => $this->lc_num,
-            'dateIssued'        => $this->date_issued->toDateString(),
-            'dateExpiry'        => $this->date_expiry->toDateString(),
             'applicant'         => $this->applicant,
             'beneficiary'       => $this->beneficiary,
+            'consignments'      => ConsignmentResource::collection($this->whenLoaded('consignments')),
+            'createdAt'         => $this->created_at->toDateString(),
             'currencyCode'      => $this->currency_code,
-            'foreignAmount'     => $this->foreign_amount,
-            'foreignExpense'    => $this->foreign_expense,
+            'dateIssued'        => $this->date_issued->toDateString(),
+            'dateExpiry'        => $this->date_expiry->toDateString(),
+            'domesticAmount'    => $this->foreign_amount * $this->exchange_rate,
             'domesticExpense'   => $this->domestic_expense,
             'exchangeRate'      => $this->exchange_rate,
-            'portDepart'        => $this->port_depart,
-            'portArrive'        => $this->port_arrive,
+            'foreignAmount'     => $this->foreign_amount,
+            'foreignExpense'    => $this->foreign_expense,
             'invoiceNumber'     => $this->invoice_num,
             'notes'             => $this->notes,
-            'createdAt'         => $this->created_at->toDateString(),
-            'consignments'      => ConsignmentResource::collection($this->whenLoaded('consignments')),
+            'portArrive'        => $this->port_arrive,
+            'portDepart'        => $this->port_depart,
+            'totalExpense'      => $this->domestic_expense + ($this->foreign_expense * $this->exchange_rate),
         ];
     }
 }

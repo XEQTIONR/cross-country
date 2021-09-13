@@ -17,9 +17,10 @@ class TyreResource extends JsonResource
         return [
             'id'        => $this->id,
             'brand'     => $this->brand,
-            'size'      => $this->size,
+            'createdAt' => $this->created_at->toDateString(),
             'pattern'   => $this->pattern,
-            'createdAt' => $this->created_at
+            'lisi'      => $this->lisi,
+            'size'      => $this->size,
         ];
     }
 }

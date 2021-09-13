@@ -12,7 +12,7 @@
                 <base-table
                     :class="'bg-white'"
                     :labels="labels"
-                    :rows="rows"
+                    :rows="this.lcs.data"
                     :textRight="textRight"
                     :totals="totals"
                 />
@@ -80,17 +80,6 @@ export default {
             ],
         }
     },
-
-    computed : {
-
-        rows() {
-             return this.lcs.data.map((item) => {
-                 item.totalExpense = (item.domesticExpense + (item.foreignExpense*item.exchangeRate));
-                 item.domesticAmount = (item.foreignAmount* item.exchangeRate);
-                 return item;
-             });
-        },
-    }
 
 }
 </script>

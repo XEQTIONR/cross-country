@@ -18,18 +18,15 @@ class LcController extends Controller
     public function index()
     {
         return [
-            'lcs' => LcResource::collection(Lc::with('consignments')
-                ->orderByDesc('created_at')->get()),
+            'lcs' => LcResource::collection(Lc::orderByDesc('created_at')->get()),
 
-            'totals' => DB::table(with(new Lc)->getTable())
-                ->select(
-                    DB::raw('SUM(foreign_amount) as foreignAmount,
-                    SUM(foreign_amount * exchange_rate) AS domesticAmount,
-                    SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense
-                    '
-                    )
+            'totals' => Lc::select(
+                DB::raw('SUM(foreign_amount) as foreignAmount,
+                SUM(foreign_amount * exchange_rate) AS domesticAmount,
+                SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense
+                '
                 )
-                ->first()
+            )->first()
         ];
     }
 

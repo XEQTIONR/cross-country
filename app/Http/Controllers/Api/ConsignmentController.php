@@ -20,11 +20,9 @@ class ConsignmentController extends Controller
     {
         return [
             'consignments' => ConsignmentResource::collection(Consignment::all()),
-            'totals' => DB::table(with(new Consignment)->getTable())
-                ->select(
-                    DB::raw('SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value')
-                )
-                ->first()
+            'totals' => Consignment::select(
+                DB::raw('SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value')
+            )->first()
         ];
     }
 

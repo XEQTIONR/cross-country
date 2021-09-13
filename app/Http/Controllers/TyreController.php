@@ -15,7 +15,10 @@ class TyreController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Tyres', ['tyres' => parent::index()]);
+        return Inertia::render('Tyres', [
+            'title' => 'Products',
+            'tyres' => parent::index(),
+        ]);
 
     }
     /**

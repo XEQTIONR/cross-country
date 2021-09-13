@@ -12,7 +12,7 @@
             <base-table
                 :class="'bg-white'"
                 :labels="labels"
-                :rows="rows"
+                :rows="this.consignments.data"
                 :textRight="textRight"
                 :totals="totals"
             />
@@ -58,12 +58,12 @@ export default {
       return {
           labels: {
               bol: 'BOL',
-              lc_num: 'LC #',
-              land_date: 'Date Landed',
+              lcNum: 'LC #',
+              landDate: 'Date Landed',
               value: 'Value (Foreign)',
               localValue: 'Value (TK)',
               tax: 'Tax',
-              created_at: 'Created On'
+              createdAt: 'Created On'
           },
 
           textRight: [
@@ -73,15 +73,6 @@ export default {
           ],
       }
     },
-
-    computed : {
-        rows() {
-            return this.consignments.data.map((item) => {
-                item.localValue = (item.exchange_rate * item.value);
-                return item;
-            });
-        },
-    }
 
 }
 </script>
