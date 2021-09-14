@@ -22,17 +22,20 @@ class OrderController extends Controller
      */
     public function index()
     {
+
         return OrderResource::collection(Order::with('customer')
             ->addSelect([
-                'subTotal' => OrderContent::selectRaw('SUM(qty * unit_price) AS asubtotal')
+                'subTotal' => OrderContent::selectRaw('SUM(qty * unit_price)')
                     ->whereColumn('order_num', 'orders.order_num')
                     ->groupBy('order_num')
                     ->limit(1),
-                'paymentsTotal' => Payment::select(DB::raw('SUM(payments.payment_amount - payments.refund_amount)'))
+                'paymentsTotal' => Payment::selectRaw('SUM(payment_amount - refund_amount)')
                     ->whereColumn('order_num', 'orders.order_num')
                     ->groupBy('order_num')
                     ->limit(1),
-        ])->get());
+            ])
+            ->orderByRaw('subTotal - paymentsTotal DESC')
+            ->paginate(10));
     }
 
     /**
