@@ -18,12 +18,10 @@ class ConsignmentController extends Controller
      */
     public function index()
     {
-        $data = parent::index();
 
         return  Inertia::render('Consignments', [
-            'consignments' => $data['consignments'],
+            'consignments' => parent::index(),
             'title' => 'Consignments',
-            'totals' => $data['totals'],
         ] );
     }
 

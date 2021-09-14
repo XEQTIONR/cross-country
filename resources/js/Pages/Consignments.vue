@@ -14,7 +14,7 @@
                 :labels="labels"
                 :rows="this.consignments.data"
                 :textRight="textRight"
-                :totals="totals"
+                :totals="consignments.meta.totals"
             />
         </div>
     </div>
@@ -47,11 +47,6 @@ export default {
             type: String,
             default: 'Dashboard',
         },
-
-        totals: {
-            type: Object,
-            default: {}
-        }
     },
 
     data() {

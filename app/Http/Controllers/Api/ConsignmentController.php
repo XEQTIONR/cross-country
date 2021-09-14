@@ -14,16 +14,17 @@ class ConsignmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return array
+     * @return AnonymousResourceCollection
      */
     public function index()
     {
-        return [
-            'consignments' => ConsignmentResource::collection(Consignment::all()),
-            'totals' => Consignment::select(
-                DB::raw('SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value')
-            )->first()
-        ];
+        return ConsignmentResource::collection(Consignment::all())
+                ->additional([ 'meta' => [
+                    'totals' => Consignment::select(
+                        DB::raw('SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value')
+                    )->first()
+                ]
+                ]);
     }
 
     /**
