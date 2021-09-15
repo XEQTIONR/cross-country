@@ -1,34 +1,68 @@
 <template>
-    <base-table :headers="headers" :rows="data" />
+    <div class="h-full flex">
+        <navigation :items="menu"/>
+        <div class="h-screen max-w-full flex flex-wrap p-10 overflow-scroll">
+            <div class="w-1/2">
+                <h1 class="text-2xl font-extrabold text-gray-600">{{ title }}</h1>
+                <h2 class="text-sm text-gray-500 mb-8">All our customers</h2>
+            </div>
+            <div class="w-1/2">
+                <search-bar />
+            </div>
+            <base-table
+                :class="'bg-white'"
+                :labels="labels"
+                :rows="orders.data"
+                :textRight="textRight"
+            />
+        </div>
+    </div>
 </template>
 
 <script>
 
 import BaseTable from '@/Components/BaseTable';
+import Navigation from "@/Components/Navigation";
+import SearchBar from "@/Components/SearchBar";
 
 export default {
-    components: {BaseTable},
+    components: {
+        BaseTable,
+        Navigation,
+        SearchBar,
+    },
     props: {
         orders : {
             type: Object,
             default: {}
-        }
-    },
-
-    computed : {
-
-        data() {
-            return this.orders.data ?? false;
         },
 
-        headers(){
-            if (this.data.length) {
-                return Object.keys(this.data[0]);
-            }
+        menu:{
+            type: Object,
+            default: {}
+        },
 
-            return [];
+        title: {
+            type: String,
+            default: 'Orders',
+        },
+    },
+    data() {
+        return {
+            labels: {
+                order_num: 'Order #',
+                date: 'Order Date',
+                customerName: 'Customer',
+                grandTotal: 'Total',
+                paymentsTotal: 'Total Payments',
+                balance: 'Balance',
+            },
+
+            textRight: [
+                'grandTotal', 'paymentsTotal', 'balance',
+            ],
         }
-    }
+    },
 
 }
 </script>
