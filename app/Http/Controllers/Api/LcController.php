@@ -13,21 +13,18 @@ class LcController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return array
+     * @return AnonymousResourceCollection
      */
     public function index()
     {
-        return [
-            'lcs' => LcResource::collection(Lc::orderByDesc('created_at')->get()),
-
-            'totals' => Lc::select(
-                DB::raw('SUM(foreign_amount) as foreignAmount,
-                SUM(foreign_amount * exchange_rate) AS domesticAmount,
-                SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense
-                '
-                )
-            )->first()
-        ];
+        return LcResource::collection(Lc::orderByDesc('created_at')->get())
+            ->additional(['meta' => [
+                'totals' => Lc::selectRaw('
+                    SUM(foreign_amount) as foreignAmount,
+                    SUM(foreign_amount * exchange_rate) AS domesticAmount,
+                    SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense'
+                )->first()
+            ]]);
     }
 
     /**

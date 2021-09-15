@@ -12,9 +12,9 @@
                 <base-table
                     :class="'bg-white'"
                     :labels="labels"
-                    :rows="this.lcs.data"
+                    :rows="lcs.data"
                     :textRight="textRight"
-                    :totals="totals"
+                    :totals="lcs.meta.totals"
                 />
         </div>
     </div>
