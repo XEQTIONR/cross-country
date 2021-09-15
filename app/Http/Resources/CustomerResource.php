@@ -15,14 +15,19 @@ class CustomerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'        => $this->id,
-            'name'      => $this->name,
-            'address'   => $this->address,
-            'phone'     => $this->phone,
-            'notes'     => $this->notes,
-            'createdAt' => $this->created_at,
-            'orders'    => OrderResource::collection($this->whenLoaded('orders')),
-            'payments'    => PaymentResource::collection($this->whenLoaded('payments')),
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'address'       => $this->address,
+            'phone'         => $this->phone,
+            'notes'         => $this->notes,
+            'createdAt'     => $this->created_at,
+            'orders'        => OrderResource::collection($this->whenLoaded('orders')),
+            'orderedItems'  => OrderContentResource::collection($this->whenLoaded('orderedItems')),
+            'payments'      => PaymentResource::collection($this->whenLoaded('payments')),
+            'totalOrders'   => $this->when(isset($this->total_orders), floatval($this->total_orders)),
+            'totalPayments' => $this->when(isset($this->total_payments), floatval($this->total_payments)),
+            'balance'       => $this->when(isset($this->total_orders) && isset($this->total_payments),
+                floatval($this->total_orders) - floatval($this->total_payments)),
         ];
     }
 }

@@ -15,6 +15,9 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return  Inertia::render('Customers', [ 'customers' => parent::index() ] );
+        return  Inertia::render('Customers', [
+            'customers' => parent::index(),
+            'title' => 'Customers',
+        ] );
     }
 }

@@ -18,7 +18,6 @@ class ConsignmentController extends Controller
      */
     public function index()
     {
-
         return  Inertia::render('Consignments', [
             'consignments' => parent::index(),
             'title' => 'Consignments',
