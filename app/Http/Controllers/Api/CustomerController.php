@@ -21,7 +21,8 @@ class CustomerController extends Controller
     public function index()
     {
         return CustomerResource::collection(
-            Customer::withSum('orderedItems as total_orders', DB::raw('order_contents.qty * unit_price'))
+            Customer::with(['orders.contents', 'orders.payments'])
+            ->withSum('orderedItems as total_orders', DB::raw('order_contents.qty * unit_price'))
             ->withSum('payments as total_payments', DB::raw('payments.payment_amount - refund_amount'))
             ->orderByRaw('total_orders - total_payments DESC')
             ->paginate(10)

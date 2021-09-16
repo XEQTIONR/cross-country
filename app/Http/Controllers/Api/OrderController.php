@@ -23,7 +23,7 @@ class OrderController extends Controller
     public function index()
     {
 
-        return OrderResource::collection(Order::with('customer')
+        return OrderResource::collection(Order::with(['customer', 'payments','contents'])
             ->addSelect([
                 'subTotal' => OrderContent::selectRaw('SUM(qty * unit_price)')
                     ->whereColumn('order_num', 'orders.order_num')
@@ -33,6 +33,8 @@ class OrderController extends Controller
                     ->whereColumn('order_num', 'orders.order_num')
                     ->groupBy('order_num')
                     ->limit(1),
+
+                'customerName' => Customer::select('name')->whereColumn('id', 'orders.customer_id')
             ])
             ->orderByRaw('subTotal - paymentsTotal DESC')
             ->paginate(10));

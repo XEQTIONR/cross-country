@@ -36,10 +36,8 @@ class OrderResource extends JsonResource
             'date'               => $this->order_date->toDateString(),
             'discountAmount'     => $this->discount_amount,
             'discountPercentage' => $this->discount_percentage,
-            $this->mergeWhen($this->whenLoaded('customer'), [
-                'customer'           => new CustomerResource($this->customer),
-                'customerName'       => $this->customer->name,
-            ]),
+            'customerName'       => $this->when(isset($this->customerName), $this->customerName),
+
             $this->mergeWhen($this->whenLoaded('contents'), function () use ($subTotal, $grandTotal) {
 
 
