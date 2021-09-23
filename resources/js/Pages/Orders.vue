@@ -14,6 +14,7 @@
                 :labels="labels"
                 :rows="orders.data"
                 :textRight="textRight"
+                :totals="orders.meta.totals"
             />
         </div>
     </div>

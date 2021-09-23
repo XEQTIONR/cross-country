@@ -37,7 +37,10 @@ class OrderController extends Controller
                 'customerName' => Customer::select('name')->whereColumn('id', 'orders.customer_id')
             ])
             ->orderByRaw('subTotal - paymentsTotal DESC')
-            ->paginate(10));
+            ->paginate(10))
+            ->additional(['meta' => [
+                'totals' => resolve('orderTotals')
+            ]]);
     }
 
     /**
