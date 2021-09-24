@@ -25,8 +25,8 @@ class CustomerController extends Controller
             ->withSum('orderedItems as total_orders', DB::raw('order_contents.qty * unit_price'))
             ->withSum('payments as total_payments', DB::raw('payments.payment_amount - refund_amount'))
             ->orderByRaw('total_orders - total_payments DESC')
-            ->paginate(10)
-        );
+            ->paginate(10))
+            ->additional(['meta' => ['totals' => resolve('orderTotals')]]);
     }
 
     /**

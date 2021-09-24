@@ -14,6 +14,11 @@
                 :labels="labels"
                 :rows="customers.data"
                 :textRight="textRight"
+                :totals="{
+                    totalOrders: customers.meta.totals.grandTotal,
+                    totalPayments: customers.meta.totals.paymentsTotal,
+                    balance: customers.meta.totals.balance
+                }"
             />
         </div>
     </div>
