@@ -56,7 +56,7 @@ export default {
         return {
             labels: {
                 id: 'ID',
-                name: 'LC #',
+                name: 'Customer Name',
                 address: 'Address',
                 phone: 'Phone #',
                 totalOrders: 'Total Orders',
