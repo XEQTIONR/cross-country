@@ -1,5 +1,5 @@
 <template>
-    <table class="w-full min-h-full overflow-scroll no-scrollbar">
+    <table class="w-full overflow-x-scroll block">
         <thead>
         <tr>
             <th

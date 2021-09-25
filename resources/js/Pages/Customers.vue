@@ -1,7 +1,7 @@
 <template>
     <div class="h-full flex">
-        <navigation :items="menu"/>
-        <div class="h-screen max-w-full flex flex-wrap p-10 overflow-scroll">
+        <navigation class="w-1/6" :items="menu"/>
+        <div class="h-screen w-5/6 flex flex-wrap p-10 overflow-clip">
             <div class="w-1/2">
                 <h1 class="text-2xl font-extrabold text-gray-600">{{ title }}</h1>
                 <h2 class="text-sm text-gray-500 mb-8">All our customers</h2>
@@ -9,17 +9,20 @@
             <div class="w-1/2">
                 <search-bar />
             </div>
-            <base-table
-                :class="'bg-white'"
-                :labels="labels"
-                :rows="customers.data"
-                :textRight="textRight"
-                :totals="{
-                    totalOrders: customers.meta.totals.grandTotal,
-                    totalPayments: customers.meta.totals.paymentsTotal,
-                    balance: customers.meta.totals.balance
-                }"
-            />
+            <div class="w-full">
+
+                <base-table
+                    :class="'bg-white'"
+                    :labels="labels"
+                    :rows="customers.data"
+                    :textRight="textRight"
+                    :totals="{
+                        totalOrders: customers.meta.totals.grandTotal,
+                        totalPayments: customers.meta.totals.paymentsTotal,
+                        balance: customers.meta.totals.balance
+                    }"
+                />
+            </div>
         </div>
     </div>
 </template>
