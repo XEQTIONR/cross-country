@@ -16,13 +16,14 @@ class ConsignmentResource extends JsonResource
     {
         return [
             'bol'           => $this->bol,
-            'lc_num'        => $this->lc_num,
-            'value'         => $this->value,
+            'containers'    => ContainerResource::collection($this->whenLoaded('containers')),
+            'createdAt'     => $this->created_at->toDateString(),
             'exchange_rate' => $this->exchange_rate,
+            'landDate'      => $this->land_date->toDateString(),
+            'lcNum'         => $this->lc_num,
+            'localValue'    => $this->value * $this->exchange_rate,
             'tax'           => $this->tax,
-            'land_date'     => $this->land_date,
-            'created_at'    => $this->created_at,
-            'containers'    => ContainerResource::collection($this->whenLoaded('containers'))
+            'value'         => $this->value,
         ];
     }
 }

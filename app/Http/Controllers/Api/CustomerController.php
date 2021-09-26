@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
+use App\Models\OrderContent;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -17,7 +20,13 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return CustomerResource::collection(Customer::with('orders.payments',)->get());
+        return CustomerResource::collection(
+            Customer::with(['orders.contents', 'orders.payments'])
+            ->withSum('orderedItems as total_orders', DB::raw('order_contents.qty * unit_price'))
+            ->withSum('payments as total_payments', DB::raw('payments.payment_amount - refund_amount'))
+            ->orderByRaw('total_orders - total_payments DESC')
+            ->paginate(10))
+            ->additional(['meta' => ['totals' => resolve('orderTotals')]]);
     }
 
     /**

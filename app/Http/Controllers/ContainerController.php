@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ContainerResource;
 use App\Models\Container;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use App\Http\Controllers\Api\ContainerController as Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ContainerController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return AnonymousResourceCollection
+     * @return Response
      */
     public function index()
     {
-        return parent::index();
+        return Inertia::render('Containers', [ 'containers' => parent::index() ]);
     }
 
     /**

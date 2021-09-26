@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Api\OrderController as Controller;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
@@ -15,7 +15,25 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return parent::index();
+        return Inertia::render('Index', [
+            'data' => parent::index(),
+            'title' => 'Orders',
+            'labels' => [
+                'order_num' => 'Order #',
+                'date' => 'Order Date',
+                'customerName' => 'Customer',
+                'grandTotal' => 'Total',
+                'paymentsTotal' => 'Total Payments',
+                'balance' => 'Balance',
+            ],
+
+            'textRight' => [
+                'grandTotal',
+                'paymentsTotal',
+                'balance'
+            ],
+
+        ]);
     }
 
     /**

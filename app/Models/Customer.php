@@ -16,13 +16,24 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function orderedItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            OrderContent::class,
+            Order::class,
+            'customer_id',
+            'order_num'
+
+        );
+    }
+
     public function payments(): HasManyThrough
     {
         return $this->hasManyThrough(
             Payment::class,
             Order::class,
             'customer_id',
-            'order_num'
+            'order_num',
         )->orderBy('created_at', 'desc');
     }
 }

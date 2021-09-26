@@ -18,8 +18,8 @@ class PaymentResource extends JsonResource
             'id' => $this->id,
             'order_num' => $this->order_num,
             'order' => new OrderResource($this->whenLoaded('order')),
-            'payment_amount' => $this->payment_amount,
-            'refund_amount' => $this->refund_amount,
+            'paymentAmount' => $this->payment_amount,
+            'refundAmount' => $this->refund_amount,
             'meta' => $this->meta,
             'createdAt' => $this->created_at,
         ];

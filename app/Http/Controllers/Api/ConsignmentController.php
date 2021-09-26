@@ -7,6 +7,7 @@ use App\Http\Resources\ConsignmentResource;
 use App\Models\Consignment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class ConsignmentController extends Controller
 {
@@ -17,7 +18,12 @@ class ConsignmentController extends Controller
      */
     public function index()
     {
-        return ConsignmentResource::collection(Consignment::with('containers')->get());
+        return ConsignmentResource::collection(Consignment::paginate(10))
+            ->additional([ 'meta' => [
+                'totals' => Consignment::selectRaw(
+                    'SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value'
+                )->first()
+            ]]);
     }
 
     /**

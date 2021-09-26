@@ -7,6 +7,7 @@ use App\Http\Resources\LcResource;
 use App\Models\Lc;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class LcController extends Controller
 {
@@ -16,7 +17,14 @@ class LcController extends Controller
      */
     public function index()
     {
-        return LcResource::collection(Lc::with('consignments')->get());
+        return LcResource::collection(Lc::orderByDesc('created_at')->paginate(10))
+            ->additional(['meta' => [
+                'totals' => Lc::selectRaw('
+                    SUM(foreign_amount) as foreignAmount,
+                    SUM(foreign_amount * exchange_rate) AS domesticAmount,
+                    SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense'
+                )->first()
+            ]]);
     }
 
     /**

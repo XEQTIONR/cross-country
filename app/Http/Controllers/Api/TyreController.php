@@ -17,7 +17,7 @@ class TyreController extends Controller
      */
     public function index()
     {
-        return TyreResource::collection(Tyre::all());
+        return TyreResource::collection(Tyre::paginate(10));
     }
 
     /**
