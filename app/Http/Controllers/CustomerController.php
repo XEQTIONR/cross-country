@@ -15,9 +15,20 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        return  Inertia::render('Customers', [
-            'customers' => parent::index(),
+        return  Inertia::render('Index', [
+            'data' => parent::index(),
             'title' => 'Customers',
+            'labels' => [
+                'id' => 'ID',
+                'name' => 'Customer Name',
+                'address' => 'Address',
+                'phone' => 'Phone #',
+                'grandTotal' => 'Total Orders',
+                'paymentsTotal'=> 'Total Payments',
+                'balance' => 'Balance'
+            ],
+
+            'textRight' => ['grandTotal', 'paymentsTotal', 'balance'],
         ] );
     }
 }

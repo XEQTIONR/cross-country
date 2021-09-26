@@ -18,9 +18,26 @@ class ConsignmentController extends Controller
      */
     public function index()
     {
-        return  Inertia::render('Consignments', [
-            'consignments' => parent::index(),
+        return  Inertia::render('Index', [
+            'data' => parent::index(),
             'title' => 'Consignments',
+
+            'labels'    => [
+                'bol'           => 'BOL',
+                'lcNum'         => 'LC #',
+                'landDate'      => 'Date Landed',
+                'value'         => 'Value (Foreign)',
+                'localValue'    => 'Value (TK)',
+                'tax'           => 'Tax',
+                'createdAt'     => 'Created On',
+            ],
+
+            'textRight' => [
+                'value',
+                'localValue',
+                'tax',
+            ],
+
         ] );
     }
 

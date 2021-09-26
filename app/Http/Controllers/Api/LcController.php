@@ -17,7 +17,7 @@ class LcController extends Controller
      */
     public function index()
     {
-        return LcResource::collection(Lc::orderByDesc('created_at')->get())
+        return LcResource::collection(Lc::orderByDesc('created_at')->paginate(10))
             ->additional(['meta' => [
                 'totals' => Lc::selectRaw('
                     SUM(foreign_amount) as foreignAmount,

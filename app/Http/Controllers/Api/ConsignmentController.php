@@ -18,7 +18,7 @@ class ConsignmentController extends Controller
      */
     public function index()
     {
-        return ConsignmentResource::collection(Consignment::all())
+        return ConsignmentResource::collection(Consignment::paginate(10))
             ->additional([ 'meta' => [
                 'totals' => Consignment::selectRaw(
                     'SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value'

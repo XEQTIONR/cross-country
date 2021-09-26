@@ -24,8 +24,8 @@ class CustomerResource extends JsonResource
             'orders'        => OrderResource::collection($this->whenLoaded('orders')),
             'orderedItems'  => OrderContentResource::collection($this->whenLoaded('orderedItems')),
             'payments'      => PaymentResource::collection($this->whenLoaded('payments')),
-            'totalOrders'   => $this->when(isset($this->total_orders), floatval($this->total_orders)),
-            'totalPayments' => $this->when(isset($this->total_payments), floatval($this->total_payments)),
+            'grandTotal'   => $this->when(isset($this->total_orders), floatval($this->total_orders)),
+            'paymentsTotal' => $this->when(isset($this->total_payments), floatval($this->total_payments)),
             'balance'       => $this->when(isset($this->total_orders) && isset($this->total_payments),
                 floatval($this->total_orders) - floatval($this->total_payments)),
         ];

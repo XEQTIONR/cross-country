@@ -17,7 +17,21 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Payments', ['payments' => parent::index()]);
+        return Inertia::render('Index', [
+            'data'      => parent::index(),
+            'labels'    => [
+                'id'            => 'Payment ID',
+                'order_num'     => 'Order #',
+                'paymentAmount' => 'Amount Paid',
+                'refundAmount'  => 'Amount Refunded',
+                'createdAt'     => 'Payment On',
+            ],
+            'title'     => 'Payments',
+            'textRight' => [
+                'paymentAmount',
+                'refundAmount',
+            ]
+        ]);
     }
 
     /**

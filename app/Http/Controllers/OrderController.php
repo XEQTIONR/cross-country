@@ -15,7 +15,25 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Orders', ['orders' => parent::index()]);
+        return Inertia::render('Index', [
+            'data' => parent::index(),
+            'title' => 'Orders',
+            'labels' => [
+                'order_num' => 'Order #',
+                'date' => 'Order Date',
+                'customerName' => 'Customer',
+                'grandTotal' => 'Total',
+                'paymentsTotal' => 'Total Payments',
+                'balance' => 'Balance',
+            ],
+
+            'textRight' => [
+                'grandTotal',
+                'paymentsTotal',
+                'balance'
+            ],
+
+        ]);
     }
 
     /**
