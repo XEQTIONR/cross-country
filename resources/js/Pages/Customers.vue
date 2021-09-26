@@ -9,7 +9,7 @@
             <div class="w-1/2">
                 <search-bar />
             </div>
-            <div class="w-full">
+            <div class="w-full relative overflow-scroll">
 
                 <base-table
                     :class="'bg-white'"
