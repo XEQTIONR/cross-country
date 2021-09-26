@@ -6742,6 +6742,14 @@ select {
   max-height: 100vh;
 }
 
+.max-h-4\/5 {
+  max-height: 80%;
+}
+
+.max-h-9\/10 {
+  max-height: 90%;
+}
+
 .min-h-0 {
   min-height: 0px;
 }
@@ -38111,6 +38119,14 @@ html, body {
     max-height: 100vh;
   }
 
+  .sm\:max-h-4\/5 {
+    max-height: 80%;
+  }
+
+  .sm\:max-h-9\/10 {
+    max-height: 90%;
+  }
+
   .sm\:min-h-0 {
     min-height: 0px;
   }
@@ -69396,6 +69412,14 @@ html, body {
 
   .md\:max-h-screen {
     max-height: 100vh;
+  }
+
+  .md\:max-h-4\/5 {
+    max-height: 80%;
+  }
+
+  .md\:max-h-9\/10 {
+    max-height: 90%;
   }
 
   .md\:min-h-0 {
@@ -100685,6 +100709,14 @@ html, body {
     max-height: 100vh;
   }
 
+  .lg\:max-h-4\/5 {
+    max-height: 80%;
+  }
+
+  .lg\:max-h-9\/10 {
+    max-height: 90%;
+  }
+
   .lg\:min-h-0 {
     min-height: 0px;
   }
@@ -131972,6 +132004,14 @@ html, body {
     max-height: 100vh;
   }
 
+  .xl\:max-h-4\/5 {
+    max-height: 80%;
+  }
+
+  .xl\:max-h-9\/10 {
+    max-height: 90%;
+  }
+
   .xl\:min-h-0 {
     min-height: 0px;
   }
@@ -163257,6 +163297,14 @@ html, body {
 
   .\32xl\:max-h-screen {
     max-height: 100vh;
+  }
+
+  .\32xl\:max-h-4\/5 {
+    max-height: 80%;
+  }
+
+  .\32xl\:max-h-9\/10 {
+    max-height: 90%;
   }
 
   .\32xl\:min-h-0 {

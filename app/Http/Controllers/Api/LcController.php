@@ -5,17 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LcResource;
 use App\Models\Lc;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 
 class LcController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
         return LcResource::collection(Lc::orderByDesc('created_at')->paginate(10))
             ->additional(['meta' => [

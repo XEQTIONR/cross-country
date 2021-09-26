@@ -1,6 +1,6 @@
 <template>
-    <table class="w-full">
-        <thead>
+    <table class="">
+        <thead class="sticky bg-white">
         <tr>
             <th
                 class="text-left font-normal text-sm px-4 py-2 whitespace-nowrap"
@@ -26,7 +26,7 @@
             />
         </tr>
         </tbody>
-        <tfoot>
+        <tfoot class="sticky bg-white">
             <tr>
                 <td
                     v-for="label in Object.keys(labels)"
@@ -82,12 +82,11 @@ export default {
 </script>
 
 <style scoped>
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
 
-.no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+table thead {
+    inset-block-start: 0; /* "top" */
+}
+table tfoot {
+    inset-block-end: 0; /* "bottom" */
 }
 </style>

@@ -4,7 +4,10 @@ require('alpinejs');
 
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'
+import { InertiaProgress } from '@inertiajs/progress'
 import route from 'ziggy-js'
+
+InertiaProgress.init()
 
 createInertiaApp({
     resolve: name => require(`./Pages/${name}`),

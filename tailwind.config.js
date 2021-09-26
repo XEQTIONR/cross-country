@@ -12,6 +12,11 @@ module.exports = {
             fontFamily: {
                 sans: ['Poppins', ...defaultTheme.fontFamily.sans],
             },
+
+            maxHeight: {
+                '4/5': '80%',
+                '9/10': '90%',
+            }
         },
     },
 
