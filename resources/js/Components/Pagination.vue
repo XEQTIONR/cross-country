@@ -1,10 +1,17 @@
 <template>
-    <div class="flex justify-end">
+    <div class="flex justify-end my-3">
         <div v-for="link in links"
-            class="h-12 mx-2"
+            :class="['hover:bg-yellow-200 mx-2 py-2 px-3 rounded',
+                link.active ? 'bg-yellow-200' : 'bg-gray-200',
+            ]"
         >
-            <inertia-link 
+            <inertia-link
+                v-if="!link.active"
                 :href="link.url"
+                v-html="link.label"
+            />
+            <span
+                v-else
                 v-html="link.label"
             />
         </div>

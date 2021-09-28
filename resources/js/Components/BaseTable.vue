@@ -1,5 +1,5 @@
 <template>
-    <table class="">
+    <table class="w-full">
         <thead class="sticky bg-white">
         <tr>
             <th
