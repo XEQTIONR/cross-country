@@ -7,7 +7,7 @@ use App\Http\Resources\LcResource;
 use App\Models\Lc;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class LcController extends Controller
 {
@@ -18,14 +18,21 @@ class LcController extends Controller
      */
     public function index(Request $request)
     {
-        return LcResource::collection(Lc::orderByDesc('created_at')->paginate(10))
-            ->additional(['meta' => [
-                'totals' => Lc::selectRaw('
-                    SUM(foreign_amount) as foreignAmount,
-                    SUM(foreign_amount * exchange_rate) AS domesticAmount,
-                    SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense'
-                )->first()
-            ]]);
+        $perPage = $request->perPage ?? 10;
+        return LcResource::collection(
+            Lc::orderByDesc('created_at')
+                ->paginate($perPage)
+                ->appends(['perPage' => $perPage])
+        )
+
+                ->additional(['meta' => [
+                    'totals' => Lc::selectRaw('
+                        SUM(foreign_amount) as foreignAmount,
+                        SUM(foreign_amount * exchange_rate) AS domesticAmount,
+                        SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense'
+                    )->first()
+            ]])
+;
     }
 
     /**

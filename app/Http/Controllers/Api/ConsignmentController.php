@@ -14,11 +14,13 @@ class ConsignmentController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ConsignmentResource::collection(Consignment::paginate(10))
+        $perPage = $request->perPage ?? 10;
+        return ConsignmentResource::collection(Consignment::paginate($perPage)->appends(['perPage' => $perPage]))
             ->additional([ 'meta' => [
                 'totals' => Consignment::selectRaw(
                     'SUM(value * exchange_rate) AS localValue, SUM(tax) as tax, SUM(value) as value'

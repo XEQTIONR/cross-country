@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\LcController as Controller;
 use App\Models\Lc;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 

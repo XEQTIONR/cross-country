@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\CustomerController as Controller;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -13,10 +14,10 @@ class CustomerController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return  Inertia::render('Index', [
-            'data' => parent::index(),
+            'data' => parent::index($request),
             'title' => 'Customers',
             'labels' => [
                 'id' => 'ID',

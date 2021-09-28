@@ -18,11 +18,12 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-
+        $perPage = $request->perPage ?? 10;
         return OrderResource::collection(Order::with(['customer', 'payments','contents'])
             ->addSelect([
                 'subTotal' => OrderContent::selectRaw('SUM(qty * unit_price)')
@@ -37,7 +38,7 @@ class OrderController extends Controller
                 'customerName' => Customer::select('name')->whereColumn('id', 'orders.customer_id')
             ])
             ->orderByRaw('subTotal - paymentsTotal DESC')
-            ->paginate(10))
+            ->paginate($perPage)->appends(['perPage' => $perPage]))
             ->additional(['meta' => [
                 'totals' => resolve('orderTotals')
             ]]);
