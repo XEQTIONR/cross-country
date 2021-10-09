@@ -15,12 +15,13 @@ class PaymentController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->perPage ?? 10;
         return PaymentResource::collection(
             Payment::with('order')
                 ->orderByDesc('id')
-            ->paginate(10)
+            ->paginate($perPage)->appends(['perPage' => $perPage])
         )->additional(['meta' => [
             'totals' => Payment::selectRaw('SUM(payment_amount) as paymentAmount, SUM(refund_amount) as refundAmount')
                 ->first()

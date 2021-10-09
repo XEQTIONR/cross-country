@@ -5,11 +5,13 @@
                 class="flex flex-row justify-start items-center py-5 px-10"
                 v-for="item in listItems"
             >
-                <icon
-                    class="mr-4 text-2xl"
-                    :icon="item.icon_class"
-                />
-                <span class="text-sm font-normal whitespace-nowrap">{{item.title}}</span>
+                <inertia-link :href="route(item.route)">
+                    <icon
+                        class="mr-4 text-2xl"
+                        :icon="item.icon_class"
+                    />
+                    <span class="text-sm font-normal whitespace-nowrap">{{item.title}}</span>
+                </inertia-link>
             </li>
         </ul>
     </div>
@@ -17,8 +19,12 @@
 
 <script>
 import Icon from "@/Components/Icon";
+import {InertiaLink} from "@inertiajs/inertia-vue3/src";
 export default {
-    components: {Icon},
+    components: {
+        Icon,
+        InertiaLink,
+    },
     props: {
         items : {
             type : Object,

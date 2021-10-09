@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ConsignmentResource;
 use App\Models\Consignment;
 use App\Http\Controllers\Api\ConsignmentController as Controller;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,10 +16,10 @@ class ConsignmentController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return  Inertia::render('Index', [
-            'data' => parent::index(),
+            'data' => parent::index($request),
             'title' => 'Consignments',
 
             'labels'    => [

@@ -5,26 +5,34 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LcResource;
 use App\Models\Lc;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class LcController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return LcResource::collection(Lc::orderByDesc('created_at')->paginate(10))
-            ->additional(['meta' => [
-                'totals' => Lc::selectRaw('
-                    SUM(foreign_amount) as foreignAmount,
-                    SUM(foreign_amount * exchange_rate) AS domesticAmount,
-                    SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense'
-                )->first()
-            ]]);
+        $perPage = $request->perPage ?? 10;
+        return LcResource::collection(
+            Lc::orderByDesc('created_at')
+                ->paginate($perPage)
+                ->appends(['perPage' => $perPage])
+        )
+
+                ->additional(['meta' => [
+                    'totals' => Lc::selectRaw('
+                        SUM(foreign_amount) as foreignAmount,
+                        SUM(foreign_amount * exchange_rate) AS domesticAmount,
+                        SUM(foreign_expense*exchange_rate + domestic_expense) AS totalExpense'
+                    )->first()
+            ]])
+;
     }
 
     /**

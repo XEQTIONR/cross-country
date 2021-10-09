@@ -15,9 +15,10 @@ class TyreController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return TyreResource::collection(Tyre::paginate(10));
+        $perPage = $request->perPage ?? 10;
+        return TyreResource::collection(Tyre::paginate($perPage)->appends(['perPage' => $perPage]));
     }
 
     /**

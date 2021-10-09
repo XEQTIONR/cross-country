@@ -20,7 +20,9 @@ class OrderResource extends JsonResource
                 return $carry + (intval($item->qty) * floatval($item->unit_price));
             }, 0);
 
-        $grandTotal = $subTotal + floatval($this->tax_amount) - floatval($this->discount_amount)
+        $grandTotal = is_numeric($this->grandTotal)
+            ? floatval($this->grandTotal)
+            : $subTotal + floatval($this->tax_amount) - floatval($this->discount_amount)
             + ($subTotal * floatval($this->tax_percentage))
             - ($subTotal * floatval($this->discount_percentage));
 

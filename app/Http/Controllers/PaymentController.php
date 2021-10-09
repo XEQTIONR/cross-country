@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
 use App\Http\Controllers\Api\PaymentController as Controller;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,10 +16,10 @@ class PaymentController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('Index', [
-            'data'      => parent::index(),
+            'data'      => parent::index($request),
             'labels'    => [
                 'id'            => 'Payment ID',
                 'order_num'     => 'Order #',
