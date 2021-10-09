@@ -21,7 +21,7 @@
                     {'text-right': textRight.find(e => e === label) !== undefined}
                 ]"
                 v-text="textRight.find(e => e === label) !== undefined
-                    ? item[label].toFixed(2)
+                    ? item[label] ? item[label].toFixed(2) : 0
                     : item[label]"
             />
         </tr>
