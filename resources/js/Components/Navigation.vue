@@ -1,32 +1,78 @@
 <template>
     <div class="h-screen  bg-gray-200">
-        <ul>
+        <ul :class="['transition',  navIsOpen ? 'transition-after' : 'transition-before']">
             <li @click="toggle"
-                class="flex p-3 m-3 justify-start items-center"
+                class="flex my-3 ml-2 items-center justify-start cursor-pointer"
             >
-                <icon
-                    class="mx-2 my-6 text-2xl font-bold"
-                    icon="menu"
-                />
-                <span v-show="hover" :class="['text-xl font-bold whitespace-nowrap ml-2', 'animate']">Cross Country</span>
-            </li>
-        </ul>
-        <ul :class="['transition',  hover ? 'transition-hover' : 'transition-before']"
-
-        >
-            <li
-                class="flex flex-row justify-start items-center p-3 mx-3 my-5 rounded hover:bg-white"
-                v-for="item in listItems"
-            >
-                <inertia-link :href="route(item.route)"
-                    class="flex items-center flex-nowrap overflow-x-hidden"
+                <tooltip
+                    :text="navIsOpen ? 'Collapse' : 'Expand'"
+                    class="mx-2 my-6 p-3 hover:bg-white"
                 >
                     <icon
-                        class="mx-2 text-lg"
-                        :icon="item.icon_class"
+                        class="text-2xl font-bold rounded-md "
+                        icon="menu"
                     />
-                    <span v-show="hover" :class="['text-xl whitespace-nowrap ml-2', 'animate']">{{item.title}}</span>
-                </inertia-link>
+                </tooltip>
+                <transition name="fade">
+                    <span
+                        v-show="navIsOpen"
+                        class="text-xl font-bold whitespace-nowrap ml-2"
+                    >
+                        Cross Country
+                    </span>
+                </transition>
+            </li>
+        </ul>
+        <ul :class="['transition',  navIsOpen ? 'transition-after' : 'transition-before']">
+            <li
+                :class="['flex flex-row justify-start items-center p-3 mx-3 my-5 rounded-md',
+                 currentRoute === item.route ? 'bg-black text-white' : 'hover:bg-white'] "
+                v-for="item in listItems"
+            >
+                <tooltip
+                    :text="item.title"
+                    :show="!navIsOpen"
+                >
+                    <inertia-link
+                        :href="route(item.route)"
+                        class="flex items-center flex-nowrap overflow-x-hidden"
+                    >
+                        <icon
+                            :class="['mx-2 my-1 text-xl', {'text-white' : currentRoute === item.route}]"
+                            :icon="item.icon_class"
+                        />
+                        <transition name="fade">
+                            <span
+                                v-show="navIsOpen"
+                                class="text-lg whitespace-nowrap ml-2"
+                            >
+                                {{item.title}}
+                            </span>
+                        </transition>
+                    </inertia-link>
+                </tooltip>
+            </li>
+        </ul>
+        <ul :class="['transition absolute bottom-3 mb-6',  navIsOpen ? 'transition-after' : 'transition-before']">
+            <li class="flex my-3 mx-3 items-center justify-start cursor-pointer hover:bg-white rounded-md">
+                <tooltip
+                    text="Log Out"
+                    :show="!navIsOpen"
+                    class="px-4 py-3"
+                >
+                    <icon
+                        class="text-2xl font-bold rounded-md "
+                        icon="exit"
+                    />
+                </tooltip>
+                <transition name="fade">
+                    <span
+                        v-show="navIsOpen"
+                        class="text-md font-bold whitespace-nowrap "
+                    >
+                        Log Out
+                    </span>
+                </transition>
             </li>
         </ul>
     </div>
@@ -34,11 +80,13 @@
 
 <script>
 import Icon from "@/Components/Icon";
+import Tooltip from "@/Components/ToolTip";
 import {InertiaLink} from "@inertiajs/inertia-vue3/src";
 export default {
     components: {
         Icon,
         InertiaLink,
+        Tooltip,
     },
     props: {
         items : {
@@ -49,12 +97,16 @@ export default {
 
     data() {
         return {
-            hover : false,
+            navIsOpen : false,
         }
     },
     computed: {
         listItems(){
             return Object.values(this.items).sort((first, second) => first.order - second.order);
+        },
+
+        currentRoute() {
+            return this.route().current();
         }
     },
 
@@ -73,14 +125,14 @@ export default {
         },
 
         toggle() {
-            this.hover = !this.hover;
-            this.setCookie('navOpen', this.hover ? 'true' : 'false');
+            this.navIsOpen = !this.navIsOpen;
+            this.setCookie('navOpen', this.navIsOpen ? 'true' : 'false');
         },
 
     },
 
     mounted() {
-        this.hover = this.getCookie('navOpen') === 'true'
+        this.navIsOpen = this.getCookie('navOpen') === 'true'
     }
 }
 </script>
@@ -95,19 +147,14 @@ export default {
         width : 5rem;
     }
 
-    .transition-hover {
-        width : 300px;
+    .transition-after{
+        width : 250px;
     }
 
-    .animate {
-        animation: animate;
-        animation-duration: .5s;
-        /*width: 100%;*/
-        opacity: 1;
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
     }
-
-    @keyframes animate {
-        from {opacity: 0}
-        to {opacity: 1}
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
     }
 </style>

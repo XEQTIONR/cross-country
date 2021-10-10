@@ -40,6 +40,14 @@ Route::resource('tyres', TyreController::class);
 
 Route::resource('waste', WasteController::class);
 
+Route::get('/users', function() {
+
+})->name('users.index');
+
+Route::get('/reports', function() {
+
+})->name('reports.index');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
