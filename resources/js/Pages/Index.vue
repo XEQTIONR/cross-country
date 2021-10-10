@@ -1,7 +1,7 @@
 <template>
     <div class="h-full flex">
-        <navigation class="w-1/6" :items="menu"/>
-        <div class="h-screen w-5/6 flex flex-col p-10">
+        <navigation :items="menu"/>
+        <div class="h-screen w-full flex flex-col p-10">
             <div class="height-fit-content w-full flex">
                 <div class="w-1/2 height-fit-content">
                     <h1 class="text-2xl font-extrabold text-gray-600">{{ title }}</h1>
