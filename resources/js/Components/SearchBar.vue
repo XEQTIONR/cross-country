@@ -2,7 +2,7 @@
     <div class="flex justify-end items-center text-xl">
         <icon icon="search" class="relative left-8 text-gray-500"/>
         <input
-            class="float-right pl-9"
+            class="float-right pl-9 rounded"
             v-model="query"
             type="text"
             :placeholder="placeholder"

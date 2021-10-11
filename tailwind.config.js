@@ -13,9 +13,8 @@ module.exports = {
                 sans: ['Poppins', ...defaultTheme.fontFamily.sans],
             },
 
-            maxHeight: {
+            spacing: {
                 '4/5': '80%',
-                '9/10': '90%',
             }
         },
     },

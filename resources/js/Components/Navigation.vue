@@ -6,19 +6,24 @@
             >
                 <tooltip
                     :text="navIsOpen ? 'Collapse' : 'Expand'"
-                    class="mx-2 my-6 p-3 hover:bg-white"
+                    :class="['ml-2 my-6 p-3 hover:bg-white']"
                 >
-                    <icon
-                        class="text-2xl font-bold rounded-md "
-                        icon="menu"
-                    />
+
+                        <icon
+                            class="rounded-md text-2xl"
+                            icon="menu"
+                        />
+
                 </tooltip>
                 <transition name="fade">
                     <span
                         v-show="navIsOpen"
-                        class="text-xl font-bold whitespace-nowrap ml-2"
+                        class="flex items-center text-xl font-bold whitespace-nowrap"
                     >
-                        Cross Country
+                        <icon
+                            class="rounded-md text-5xl mx-1"
+                            icon="crosscountry"
+                        />
                     </span>
                 </transition>
             </li>
@@ -38,7 +43,7 @@
                         class="flex items-center flex-nowrap overflow-x-hidden"
                     >
                         <icon
-                            :class="['mx-2 my-1 text-xl', {'text-white' : currentRoute === item.route}]"
+                            :class="['mx-1.5 my-1 text-xl', {'text-white' : currentRoute === item.route}]"
                             :icon="item.icon_class"
                         />
                         <transition name="fade">
