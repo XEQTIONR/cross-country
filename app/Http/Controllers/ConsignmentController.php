@@ -21,7 +21,7 @@ class ConsignmentController extends Controller
         return  Inertia::render('Index', [
             'data' => parent::index($request),
             'title' => 'Consignments',
-
+            'searchKey' => 'consignment',
             'labels'    => [
                 'bol'           => 'BOL',
                 'lcNum'         => 'LC #',

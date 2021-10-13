@@ -2,16 +2,23 @@
 
 namespace App\Models;
 
+use App\Http\Resources\ConsignmentResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Traits\Searchable;
 
 class Consignment extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $primaryKey = 'bol';
+
+    public static $searchableFields = ['bol'];
+
+    protected static $resourceClass = ConsignmentResource::class;
 
     protected $casts = [
         'bol'   => 'string',

@@ -17,7 +17,7 @@
                         />
                         Create New
                     </a>
-                    <search-bar />
+                    <search-bar @search="search" />
                 </div>
             </div>
             <div class="object-fill px-7 max-h-4/5 w-auto max-w-full">
@@ -80,6 +80,11 @@ export default {
             type: String,
             default: 'Dashboard',
         },
+
+        searchKey: {
+            type: String,
+            default: null,
+        }
     },
 
     computed: {
@@ -91,6 +96,20 @@ export default {
             return this.data.meta.totals;
         }
     },
+
+    methods: {
+        search(query) {
+            console.log('search in index', query);
+            axios.post(route('search'), {
+                query: query,
+                entity: this.searchKey,
+            }).then((res) => {
+                console.log('res', res)
+            }).catch(e => {
+                console.log(e.data);
+            })
+        }
+    }
 }
 </script>
 
