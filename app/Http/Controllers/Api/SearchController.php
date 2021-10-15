@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Lc;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\Tyre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -34,7 +35,8 @@ class SearchController extends Controller
                 return Payment::search($query);
             case 'customer':
                 return Customer::search($query);
-
+            case 'tyre':
+                return Tyre::search($query);
         }
 
     }

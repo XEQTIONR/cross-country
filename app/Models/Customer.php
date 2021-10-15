@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\CustomerResource;
 use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-
 class Customer extends Model
 {
     use HasFactory;
@@ -21,7 +20,7 @@ class Customer extends Model
         'phone'
     ];
 
-    protected static $resourceClass = OrderResource::class;
+    protected static $resourceClass = CustomerResource::class;
 
     public function orders(): HasMany
     {

@@ -27,7 +27,8 @@ class TyreController extends Controller
                 'pattern' => 'Pattern',
                 'lisi' => 'Li/Si',
                 'createdAt' => 'Created On'
-            ]
+            ],
+            'searchKey' => 'tyre',
         ]);
 
     }
