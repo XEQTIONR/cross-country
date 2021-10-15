@@ -21,6 +21,7 @@ class LcController extends Controller
         return Inertia::render('Index', [
             'data'      => parent::index($request),
             'title'     => 'Letters of Credit',
+            'searchKey' => 'lc',
             'labels'    => [
                 'lc_num'        => 'LC #',
                 'dateIssued'    => 'Issue Date',
