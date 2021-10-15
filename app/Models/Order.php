@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Resources\OrderResource;
+use App\Models\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,8 +12,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Order extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $primaryKey = 'order_num';
+
+    public static $searchable = [
+        'order_num',
+        'order_date',
+        'discount_percentage',
+        'discount_amount',
+        'tax_percentage',
+        'tax_amount'
+    ];
+
+    protected static $resourceClass = OrderResource::class;
 
     protected $casts = [
         'discount_percentage' => 'float',
@@ -21,7 +35,7 @@ class Order extends Model
     ];
 
     protected $dates = [
-      'order_date',
+      'order_date', 'order_num'
     ];
 
     public function customer(): BelongsTo

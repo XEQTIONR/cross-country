@@ -20,8 +20,6 @@ class ConsignmentController extends Controller
     {
         return  Inertia::render('Index', [
             'data' => parent::index($request),
-            'title' => 'Consignments',
-            'searchKey' => 'consignment',
             'labels'    => [
                 'bol'           => 'BOL',
                 'lcNum'         => 'LC #',
@@ -31,12 +29,13 @@ class ConsignmentController extends Controller
                 'tax'           => 'Tax',
                 'createdAt'     => 'Created On',
             ],
-
+            'searchKey' => 'consignment',
             'textRight' => [
                 'value',
                 'localValue',
                 'tax',
             ],
+            'title' => 'Consignments',
 
         ] );
     }

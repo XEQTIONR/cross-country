@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\ConsignmentResource;
 use App\Http\Controllers\Controller;
 use App\Models\Consignment;
+use App\Models\Customer;
 use App\Models\Lc;
+use App\Models\Order;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -19,12 +22,18 @@ class SearchController extends Controller
 
     public function index(Request $request) {
 
+        $query = $request->input('query');
         switch($request->input('entity')) {
-
-            case 'lc' :
-                return Lc::search($request->input('query'));
+            case 'lc':
+                return Lc::search($query);
             case 'consignment' :
-                return Consignment::search($request->input('query'));
+                return Consignment::search($query);
+            case 'order':
+                return Order::search($query);
+            case 'payment':
+                return Payment::search($query);
+            case 'customer':
+                return Customer::search($query);
 
         }
 

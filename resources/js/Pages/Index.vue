@@ -32,6 +32,7 @@
                 </div>
             </div>
             <pagination
+                v-show="!isSearching"
                 class="mt-7 pr-5"
                 :links="data.meta.links"
             />
@@ -41,6 +42,7 @@
 
 <script>
 
+import _ from 'lodash';
 import BaseTable from '@/Components/BaseTable';
 import Navigation from "@/Components/Navigation";
 import SearchBar from "@/Components/SearchBar";
@@ -54,6 +56,13 @@ export default {
         BaseTable,
         Navigation,
         SearchBar,
+    },
+
+    data() {
+      return {
+          isSearching : false,
+          searchResults : null,
+      }
     },
     props: {
         data : {
@@ -89,7 +98,11 @@ export default {
 
     computed: {
         rows() {
-            return this.data.data;
+            try {
+                return this.isSearching ? this.searchResults.data : this.data.data;
+            } catch(e) {
+                return [];
+            }
         },
 
         totals() {
@@ -98,17 +111,24 @@ export default {
     },
 
     methods: {
-        search(query) {
-            console.log('search in index', query);
-            axios.post(route('search'), {
-                query: query,
-                entity: this.searchKey,
-            }).then((res) => {
-                console.log('res', res)
-            }).catch(e => {
-                console.log(e.data);
-            })
-        }
+        search : _.debounce(function(query) {
+            console.log('func called');
+            if(query === '') {
+                this.isSearching = false;
+            } else {
+                this.isSearching = true;
+                axios.post(route('search'), {
+                    query: query,
+                    entity: this.searchKey,
+                }).then((res) => {
+                    this.searchResults = res.data
+                    console.log('res', res)
+                }).catch(e => {
+                    console.log(e.data);
+                })
+            }
+
+        }, 1000)
     }
 }
 </script>

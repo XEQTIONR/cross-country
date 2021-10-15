@@ -17,15 +17,16 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Index', [
-            'data' => parent::index($request),
-            'title' => 'Orders',
-            'labels' => [
-                'order_num' => 'Order #',
-                'date' => 'Order Date',
-                'customerName' => 'Customer',
-                'grandTotal' => 'Total',
+            'data'      => parent::index($request),
+            'title'     => 'Orders',
+            'searchKey' => 'order',
+            'labels'    => [
+                'order_num'     => 'Order #',
+                'date'          => 'Order Date',
+                'customerName'  => 'Customer',
+                'grandTotal'    => 'Total',
                 'paymentsTotal' => 'Total Payments',
-                'balance' => 'Balance',
+                'balance'       => 'Balance',
             ],
 
             'textRight' => [

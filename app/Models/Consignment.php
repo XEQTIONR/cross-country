@@ -16,7 +16,7 @@ class Consignment extends Model
 
     protected $primaryKey = 'bol';
 
-    public static $searchableFields = ['bol'];
+    public static $searchable = ['bol', 'lc_num'];
 
     protected static $resourceClass = ConsignmentResource::class;
 

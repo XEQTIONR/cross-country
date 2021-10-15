@@ -16,7 +16,7 @@ class Lc extends Model
 
     protected $primaryKey = 'lc_num';
 
-    public static $searchableFields = ['lc_num', 'exchange_rate'];
+    public static $searchable = ['lc_num', 'exchange_rate'];
 
     protected static $resourceClass = LcResource::class;
 
