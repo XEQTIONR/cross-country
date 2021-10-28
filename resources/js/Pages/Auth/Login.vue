@@ -6,7 +6,7 @@
                 <label for="email" :value="'Email'" />
 
                 <input
-                    v-model="email"
+                    v-model="form.email"
                     id="email"
                     class="block mt-1 w-full" type="email" name="email"
                     required autofocus
@@ -18,7 +18,7 @@
                 <label for="password" :value="'Password'" />
 
                 <input
-                    v-model="password"
+                    v-model="form.password"
                     id="password" class="block mt-1 w-full"
                          type="password"
                          name="password"
@@ -36,11 +36,9 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-<!--                    @if (Route::has('password.request'))-->
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
                     {{ 'Forgot your password?' }}
                 </a>
-<!--                    @endif-->
 
                 <button class="ml-3" type="submit">
                     {{ 'Log in' }}
@@ -50,46 +48,23 @@
 </template>
 
 <script>
-import {reactive} from 'vue'
-import { Inertia } from '@inertiajs/inertia'
 export default {
 
     data() {
         return {
-            // form: reactive({
+            form: this.$inertia.form({
                 email: '',
                 password: '',
-                remember: 'off',
-            // }),
+                remember: false,
+            }),
         };
     },
     methods: {
         submit() {
-            window.axios.post(this.route('login.request'), {
-                email : this.email,
-                password : this.password,
-                remember : this.remember,
-            })
-            .then((res) => {
-                console.log('then');
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log('catch');
-                console.log(err);
-                console.log(err.data);
-                console.log(err.response);
-                console.log(err.error);
-                console.log(err.message());
-            });
-            // this.form
-            //     .post(this.route('login.request'), {
-            //         onFinish: () => {
-            //             this.form.reset('password');
-            //             console.log('onFinish triggered');
-            //         }
-            //     });
-
+            this.form
+                .post(this.route('login'), {
+                    onFinish: () => this.form.reset('password'),
+                });
         },
     }
 }
