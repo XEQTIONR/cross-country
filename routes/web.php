@@ -24,7 +24,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('lcs', LcController::class);
+Route::resource('lcs', LcController::class)->middleware('auth:sanctum');
 
 Route::resource('consignments', ConsignmentController::class);
 
