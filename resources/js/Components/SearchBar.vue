@@ -31,6 +31,13 @@ export default {
         }
     },
 
+    emits: ['search'],
+
+    watch :{
+        query(val) {
+            this.$emit('search', val);
+        }
+    },
     mounted() {
         if (this.query !== this.initQuery) {
             this.query = this.initQuery;

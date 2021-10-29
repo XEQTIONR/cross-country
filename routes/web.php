@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ConsignmentController;
 use App\Http\Controllers\ContainerController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LcController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
@@ -24,33 +25,38 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('lcs', LcController::class);
 
-Route::resource('consignments', ConsignmentController::class);
+Route::middleware('auth')->group(function () {
 
-Route::resource('containers', ContainerController::class);
+    Route::resource('lcs', LcController::class);
 
-Route::resource('customers', \App\Http\Controllers\CustomerController::class);
+    Route::resource('consignments', ConsignmentController::class);
 
-Route::resource('orders', OrderController::class);
+    Route::resource('containers', ContainerController::class);
 
-Route::resource('payments', PaymentController::class);
+    Route::resource('customers', CustomerController::class);
 
-Route::resource('tyres', TyreController::class);
+    Route::resource('orders', OrderController::class);
 
-Route::resource('waste', WasteController::class);
+    Route::resource('payments', PaymentController::class);
 
-Route::get('/users', function() {
+    Route::resource('tyres', TyreController::class);
 
-})->name('users.index');
+    Route::resource('waste', WasteController::class);
 
-Route::get('/reports', function() {
+    Route::get('/users', function() {
 
-})->name('reports.index');
+    })->name('users.index');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    Route::get('/reports', function() {
+
+    })->name('reports.index');
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
 
 require __DIR__.'/auth.php';
 

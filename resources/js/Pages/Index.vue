@@ -17,7 +17,7 @@
                         />
                         Create New
                     </a>
-                    <search-bar />
+                    <search-bar @search="search" />
                 </div>
             </div>
             <div class="object-fill px-7 max-h-4/5 w-auto max-w-full">
@@ -32,6 +32,7 @@
                 </div>
             </div>
             <pagination
+                v-show="!isSearching"
                 class="mt-7 pr-5"
                 :links="data.meta.links"
             />
@@ -41,6 +42,7 @@
 
 <script>
 
+import _ from 'lodash';
 import BaseTable from '@/Components/BaseTable';
 import Navigation from "@/Components/Navigation";
 import SearchBar from "@/Components/SearchBar";
@@ -54,6 +56,13 @@ export default {
         BaseTable,
         Navigation,
         SearchBar,
+    },
+
+    data() {
+      return {
+          isSearching : false,
+          searchResults : null,
+      }
     },
     props: {
         data : {
@@ -80,17 +89,47 @@ export default {
             type: String,
             default: 'Dashboard',
         },
+
+        searchKey: {
+            type: String,
+            default: null,
+        }
     },
 
     computed: {
         rows() {
-            return this.data.data;
+            try {
+                return this.isSearching ? this.searchResults.data : this.data.data;
+            } catch(e) {
+                return [];
+            }
         },
 
         totals() {
             return this.data.meta.totals;
         }
     },
+
+    methods: {
+        search : _.debounce(function(query) {
+            console.log('func called');
+            if(query === '') {
+                this.isSearching = false;
+            } else {
+                this.isSearching = true;
+                axios.post(route('search'), {
+                    query: query,
+                    entity: this.searchKey,
+                }).then((res) => {
+                    this.searchResults = res.data
+                    console.log('res', res)
+                }).catch(e => {
+                    console.log(e.data);
+                })
+            }
+
+        }, 1000)
+    }
 }
 </script>
 

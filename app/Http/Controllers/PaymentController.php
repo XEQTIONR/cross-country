@@ -27,11 +27,12 @@ class PaymentController extends Controller
                 'refundAmount'  => 'Amount Refunded',
                 'createdAt'     => 'Payment On',
             ],
-            'title'     => 'Payments',
+            'searchKey' => 'payment',
             'textRight' => [
                 'paymentAmount',
                 'refundAmount',
-            ]
+            ],
+            'title'     => 'Payments',
         ]);
     }
 
