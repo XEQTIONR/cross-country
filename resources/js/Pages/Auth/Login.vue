@@ -1,5 +1,5 @@
 <template>
-        <form method="POST" @submit.prevent="submit">
+        <form @submit.prevent="submit">
 
             <!-- Email Address -->
             <div>
