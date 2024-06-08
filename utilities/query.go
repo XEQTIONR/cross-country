@@ -25,7 +25,7 @@ func GetFilters(c *gin.Context, p url.Values) Filters {
 
 func (f Filters) ToSql() string {
 
-	sql := "WHERE "
+	sql := ""
 	for k, v := range f {
 
 		arr := strings.SplitN(k, ".", 2)
@@ -50,8 +50,8 @@ func (f Filters) ToSql() string {
 			clause = field + " LIKE '" + v + "'"
 		}
 
-		if sql == "WHERE " {
-			sql += clause
+		if sql == "" {
+			sql = "WHERE " + clause
 		} else {
 			sql += " AND " + clause
 		}

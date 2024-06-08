@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import { useData } from '../composables/useData.js'
 import RegisterView from '@/views/RegisterView.vue'
+import LcsView from '@/views/LcsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,12 +49,17 @@ const router = createRouter({
       path: '/private/new',
       name: 'new',
       component: () => import('../views/NewView.vue')
+    },
+    {
+      path: '/lcs',
+      name: 'lcs.index',
+      component: LcsView
     }
   ]
 })
 
 router.beforeEach(async (to) => {
-  const data  = await useData(to.path, router)
+  const data  = await useData(to.fullPath, router,)
   window.data = data
 })
 

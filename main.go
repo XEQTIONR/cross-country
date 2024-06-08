@@ -271,6 +271,7 @@ func lcIndex(c *gin.Context) {
 	lcArr, err = lcs.GetAlt(filters.ToSql(), offset, limit)
 
 	c.JSON(http.StatusOK, map[string]any{
+	respond(c, map[string]any{
 		"perPage": perPage, "page": page,
 		"filters": filters,
 		"sql":     filters.ToSql(),

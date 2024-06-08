@@ -2,7 +2,8 @@ import axios from 'axios'
 
 export async function useData(to, router) {
     let data = {}
-    if (window.originURL == to) {
+
+    if (window.originURL == window.location.origin + to) {
         // dont make api call
         data = window.apiData
     } else {
