@@ -1,4 +1,4 @@
-module gotestapp
+module cross-country
 
 go 1.22.1
 

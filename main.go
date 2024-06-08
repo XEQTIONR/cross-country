@@ -1,15 +1,18 @@
 package main
 
 import (
+	"cross-country/lcs"
+	"cross-country/mail"
+	"cross-country/middleware"
+	"cross-country/users"
+	"cross-country/utilities"
 	"encoding/gob"
 	"encoding/json"
 	"fmt"
-	"gotestapp/mail"
-	"gotestapp/middleware"
-	"gotestapp/users"
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -241,6 +244,42 @@ func respondWithError(c *gin.Context, data map[string]any, errorCode int) {
 	}
 }
 
+func lcIndex(c *gin.Context) {
+	params := c.Request.URL.Query()
+	perPage := c.DefaultQuery("perPage", "10")
+	page := c.DefaultQuery("page", "1")
+
+	var err error
+
+	filters := utilities.GetFilters(c, params)
+
+	pp, err := strconv.Atoi(perPage)
+	offset := ""
+
+	if err == nil {
+		var p int
+		p, err = strconv.Atoi(page)
+		if err == nil {
+			skip := (p - 1) * pp
+			str := strconv.Itoa(skip)
+			offset = " OFFSET " + str
+		}
+	}
+
+	limit := " LIMIT " + strconv.Itoa(pp)
+	var lcArr []lcs.Lc
+	lcArr, err = lcs.GetAlt(filters.ToSql(), offset, limit)
+
+	c.JSON(http.StatusOK, map[string]any{
+		"perPage": perPage, "page": page,
+		"filters": filters,
+		"sql":     filters.ToSql(),
+		"lcs":     lcArr,
+		"err":     err,
+	})
+	//respond(c, map[string]any{"perPage": perPage, "page": page, "filters": filters})
+}
+
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -256,7 +295,9 @@ func main() {
 
 		r.HTMLRender = createMyRender()
 
-		gob.Register(&map[string]string{})
+		gob.Register(&map[string]string{}) // why do we need this?
+
+		r.GET("/lcs", lcIndex)
 
 		r.GET("/", func(c *gin.Context) {
 			session := sessions.Default(c)

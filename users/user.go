@@ -71,7 +71,6 @@ func (u *User) Save() error {
 }
 
 func FindByUsername(username string) User {
-	fmt.Println("findByUsername : " + username)
 	var u User
 	db, err := sql.Open("mysql", dbString)
 	if err == nil {
