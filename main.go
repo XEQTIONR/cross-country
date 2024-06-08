@@ -35,7 +35,6 @@ func createMyRender() multitemplate.Renderer {
 
 	r.AddFromFiles("home", "dist/index.html")
 
-	r.AddFromFiles("me", "templates/base.html", "templates/me/main.html")
 	return r
 }
 
@@ -270,15 +269,12 @@ func lcIndex(c *gin.Context) {
 	var lcArr []lcs.Lc
 	lcArr, err = lcs.GetAlt(filters.ToSql(), offset, limit)
 
-	c.JSON(http.StatusOK, map[string]any{
 	respond(c, map[string]any{
 		"perPage": perPage, "page": page,
 		"filters": filters,
-		"sql":     filters.ToSql(),
 		"lcs":     lcArr,
 		"err":     err,
 	})
-	//respond(c, map[string]any{"perPage": perPage, "page": page, "filters": filters})
 }
 
 func main() {
@@ -291,6 +287,7 @@ func main() {
 		r := gin.New()
 		r.Static("/assets", "dist/assets")
 		r.Static("/dist", "dist")
+		r.StaticFile("/favicon.ico", "public/favicon.ico")
 		r.Use(sessions.Sessions("XSRF-TOKEN", cookie.NewStore(secret)))
 		r.Use(middleware.CheckCSRFToken())
 
