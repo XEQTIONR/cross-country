@@ -253,27 +253,23 @@ func lcIndex(c *gin.Context) {
 	filters := utilities.GetFilters(c, params)
 
 	pp, err := strconv.Atoi(perPage)
-	offset := ""
-
+	var skip int
+	var p int
 	if err == nil {
-		var p int
+
 		p, err = strconv.Atoi(page)
 		if err == nil {
-			skip := (p - 1) * pp
-			str := strconv.Itoa(skip)
-			offset = " OFFSET " + str
+			skip = (p - 1) * pp
 		}
 	}
 
-	limit := " LIMIT " + strconv.Itoa(pp)
-	var lcArr []lcs.Lc
-	lcArr, err = lcs.GetAlt(filters.ToSql(), offset, limit)
+	lcArr, err := lcs.GetAlt(filters.ToSql(), skip, pp)
 
 	respond(c, map[string]any{
 		"perPage": perPage, "page": page,
 		"filters": filters,
-		"lcs":     lcArr,
 		"err":     err,
+		"lcs":     utilities.PaginatedResults[lcs.Lc]{Items: lcArr, Filters: filters, PerPage: pp, Page: p},
 	})
 }
 

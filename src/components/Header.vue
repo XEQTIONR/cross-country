@@ -10,6 +10,7 @@
           <AnchorLink class="ml-6 font-bold" to="/register">Register</AnchorLink>
           <AnchorLink class="ml-6 font-bold" to="/private/new">New</AnchorLink>
           <AnchorLink class="ml-6 font-bold" to="/private/me">Me</AnchorLink>
+          <AnchorLink class="ml-6 font-bold" to="/lcs">Lcs</AnchorLink>
         </nav>
     </header>
 </template>

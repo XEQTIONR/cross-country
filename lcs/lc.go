@@ -2,6 +2,7 @@ package lcs
 
 import (
 	"database/sql"
+	"strconv"
 	"time"
 )
 
@@ -18,6 +19,7 @@ type Lc struct {
 	ForeignExpense  float32 `json:"foreign_expense"`
 	DomesticExpense float32 `json:"domestic_expense"`
 	ExchangeRate    float32 `json:"exchange_rate"`
+	LocalAmount     float32 `json:"local_amount"`
 	PortDepart      string  `json:"port_depart"`
 	PortArrive      string  `json:"port_arrive"`
 	InvoiceNo       string  `json:"invoice_no"`
@@ -25,6 +27,10 @@ type Lc struct {
 
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (lc *Lc) SetLocalAmount() {
+	lc.LocalAmount = lc.ForeignAmount * lc.ExchangeRate
 }
 
 func All() ([]Lc, error) {
@@ -68,16 +74,16 @@ func Get(where, offset, limit string) ([]Lc, error) {
 	return lcs, err
 }
 
-func GetAlt(where, offset, limit string) ([]Lc, error) {
+func GetAlt(where string, offset, limit int) ([]Lc, error) {
 	var lcs []Lc = []Lc{}
 
 	if db, err := sql.Open("mysql", dbString); err != nil {
-		return lcs, err
+		return nil, err
 	} else {
 		defer db.Close()
-		query := "SELECT * FROM lcs " + where + limit + offset
+		query := "SELECT * FROM lcs " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
 		if rows, err := db.Query(query); err != nil {
-			return lcs, err
+			return nil, err
 		} else {
 			defer rows.Close()
 			for rows.Next() {
@@ -89,12 +95,14 @@ func GetAlt(where, offset, limit string) ([]Lc, error) {
 					&lc.InvoiceNo, &lc.Notes,
 					&lc.CreatedAt, &lc.UpdatedAt); err != nil {
 
-					return lcs, err
+					return nil, err
 				} else {
+					lc.SetLocalAmount()
 					lcs = append(lcs, lc)
 				}
 			}
 		}
+
 		return lcs, err
 	}
 }
