@@ -9,6 +9,7 @@ import (
 	"encoding/gob"
 	"encoding/json"
 	"fmt"
+	"math"
 	"math/rand"
 	"net/http"
 	"os"
@@ -244,32 +245,64 @@ func respondWithError(c *gin.Context, data map[string]any, errorCode int) {
 }
 
 func lcIndex(c *gin.Context) {
+	fmt.Println("lcIndex")
+	fmt.Printf("%v\n", c.Request.URL.Path)
 	params := c.Request.URL.Query()
-	perPage := c.DefaultQuery("perPage", "10")
-	page := c.DefaultQuery("page", "1")
+	perPageParam := c.DefaultQuery("perPage", "10")
+	pageParam := c.DefaultQuery("page", "1")
 
 	var err error
+	var perPage, page, skip, total int
+	var lcArr []lcs.Lc
 
+	url := c.Request.URL.Path + fmt.Sprintf("?perPage=%s&page=", perPageParam)
 	filters := utilities.GetFilters(c, params)
 
-	pp, err := strconv.Atoi(perPage)
-	var skip int
-	var p int
-	if err == nil {
+	perPage, err = strconv.Atoi(perPageParam)
 
-		p, err = strconv.Atoi(page)
-		if err == nil {
-			skip = (p - 1) * pp
-		}
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
 	}
 
-	lcArr, err := lcs.GetAlt(filters.ToSql(), skip, pp)
+	if err == nil {
+		lcArr, err = lcs.GetAlt(filters.ToSql(), skip, perPage)
+	}
+
+	if err == nil {
+		total, err = lcs.Count()
+	}
+
+	links := []utilities.PaginationLink{}
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+
+	for i := 1; i <= totalPages; i++ {
+		link := url + strconv.Itoa(i)
+		for k, v := range filters {
+			link = link + "&" + k + "=" + v
+		}
+		links = append(links, utilities.PaginationLink{
+			Label:         strconv.Itoa(i),
+			Link:          link,
+			IsCurrentPage: i == page,
+		})
+	}
+
+	results := utilities.PaginatedResults[lcs.Lc]{
+		Items:      lcArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+	}
 
 	respond(c, map[string]any{
-		"perPage": perPage, "page": page,
+		"perPage": perPageParam, "page": pageParam,
 		"filters": filters,
 		"err":     err,
-		"lcs":     utilities.PaginatedResults[lcs.Lc]{Items: lcArr, Filters: filters, PerPage: pp, Page: p},
+		"lcs":     results,
 	})
 }
 

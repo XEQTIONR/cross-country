@@ -2,6 +2,7 @@ package lcs
 
 import (
 	"database/sql"
+	"errors"
 	"strconv"
 	"time"
 )
@@ -104,5 +105,29 @@ func GetAlt(where string, offset, limit int) ([]Lc, error) {
 		}
 
 		return lcs, err
+	}
+}
+
+func Count() (int, error) {
+	if db, err := sql.Open("mysql", dbString); err != nil {
+		return 0, err
+	} else {
+		defer db.Close()
+		if row, err := db.Query("SELECT COUNT(*) FROM lcs"); err != nil {
+			return 0, err
+		} else {
+			defer row.Close()
+			if row.Next() {
+				var count int
+
+				if err := row.Scan(&count); err != nil {
+					return 0, err
+				}
+
+				return count, nil
+			}
+
+			return 0, errors.New("no more rows")
+		}
 	}
 }

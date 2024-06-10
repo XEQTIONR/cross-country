@@ -45,21 +45,48 @@
             <td class="text-right px-2 py-3">{{ lc.local_amount }}</td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="8">
+              <div class="flex w-full justify-end">
+                <!-- <span>Page {{ pageData?.lcs?.page }} / {{ pageData?.lcs?.total_pages }}</span> -->
+                <AnchorLink :to="previousLink?.link ?? '/404'" :disabled="previousLink == null" class="pb-0.5 px-1 bg-gray-200"><i class="lni lni-chevron-left align-middle"></i></AnchorLink>
+                <AnchorLink
+                  v-for="link in pageData?.lcs.links"
+                  :key="link.label"
+                  :to="link.link"
+                  :disabled="link.is_current_page"
+                  class="pb-0.5 px-1 bg-gray-200 ml-2">{{ link.label }}</AnchorLink>
+                  <AnchorLink :to="nextLink?.link ?? '/404'" :disabled="nextLink == null" class="pb-0.5 px-1 ml-2 bg-gray-200"><i class="lni lni-chevron-right align-middle"></i></AnchorLink>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 </template>
 
 <script>
+
+import AnchorLink from '@/components/AnchorLink.vue';
 import AppHeader from '@/components/Header.vue'
 
 export default {
   
   beforeRouteEnter (to, from, next) {
+    console.log('beforeRouteEnter')
     next(vm => vm.pageData = window.data)
+  },
+
+  beforeRouteUpdate (to, from, next) {
+    console.log('beforeRouteUpdate')
+    this.pageData = window.data
+    next()
   },
 
   components: {
     AppHeader,
+    AnchorLink,
   },
 
   data () {
@@ -67,6 +94,36 @@ export default {
       pageData: null,
     }
   },
+
+  computed: {
+    previousLink () {
+
+      const all = this.pageData?.lcs?.links
+
+      if (all) {
+        const index = all.findIndex(({is_current_page}) => is_current_page)
+
+        if (index > 0) {
+          return this.pageData.lcs.links[index-1]
+        }
+      }
+
+      return null
+    },
+    nextLink () {
+      const all = this.pageData?.lcs?.links
+
+      if (all) {
+        const index = all.findIndex(({is_current_page}) => is_current_page)
+
+        if (index < (this.pageData.lcs.links.length - 1)) {
+          return this.pageData.lcs.links[index+1]
+        }
+      }
+
+      return null
+    },
+  }
 }
 
 
