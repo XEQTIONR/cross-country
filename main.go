@@ -245,8 +245,6 @@ func respondWithError(c *gin.Context, data map[string]any, errorCode int) {
 }
 
 func lcIndex(c *gin.Context) {
-	fmt.Println("lcIndex")
-	fmt.Printf("%v\n", c.Request.URL.Path)
 	params := c.Request.URL.Query()
 	perPageParam := c.DefaultQuery("perPage", "10")
 	pageParam := c.DefaultQuery("page", "1")
@@ -270,7 +268,7 @@ func lcIndex(c *gin.Context) {
 	}
 
 	if err == nil {
-		total, err = lcs.Count()
+		total, err = lcs.Count(filters.ToSql())
 	}
 
 	links := []utilities.PaginationLink{}

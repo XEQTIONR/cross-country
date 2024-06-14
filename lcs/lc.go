@@ -108,12 +108,12 @@ func GetAlt(where string, offset, limit int) ([]Lc, error) {
 	}
 }
 
-func Count() (int, error) {
+func Count(where string) (int, error) {
 	if db, err := sql.Open("mysql", dbString); err != nil {
 		return 0, err
 	} else {
 		defer db.Close()
-		if row, err := db.Query("SELECT COUNT(*) FROM lcs"); err != nil {
+		if row, err := db.Query("SELECT COUNT(*) FROM lcs " + where); err != nil {
 			return 0, err
 		} else {
 			defer row.Close()
