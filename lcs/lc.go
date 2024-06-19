@@ -1,13 +1,14 @@
 package lcs
 
 import (
+	"cross-country/db"
 	"database/sql"
 	"errors"
 	"strconv"
 	"time"
 )
 
-var dbString string = "root:strong_password@tcp(127.0.0.1:3306)/nano_db?parseTime=true"
+var dbString = db.GetDBString()
 
 type Lc struct {
 	LcNumber        string  `json:"lc_num"`
@@ -40,18 +41,18 @@ func All() ([]Lc, error) {
 
 func Get(where, offset, limit string) ([]Lc, error) {
 	var (
-		lcs  []Lc
-		err  error
-		db   *sql.DB
-		rows *sql.Rows
+		lcs      []Lc
+		err      error
+		database *sql.DB
+		rows     *sql.Rows
 	)
 
-	db, err = sql.Open("mysql", dbString)
+	database, err = sql.Open("mysql", dbString)
 
 	if err == nil {
-		defer db.Close()
+		defer database.Close()
 		query := "SELECT * FROM lcs " + where + limit + offset
-		rows, err = db.Query(query)
+		rows, err = database.Query(query)
 		if err == nil {
 			defer rows.Close()
 			for rows.Next() {
@@ -78,12 +79,12 @@ func Get(where, offset, limit string) ([]Lc, error) {
 func GetAlt(where string, offset, limit int) ([]Lc, error) {
 	var lcs []Lc = []Lc{}
 
-	if db, err := sql.Open("mysql", dbString); err != nil {
+	if database, err := sql.Open("mysql", dbString); err != nil {
 		return nil, err
 	} else {
-		defer db.Close()
+		defer database.Close()
 		query := "SELECT * FROM lcs " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
-		if rows, err := db.Query(query); err != nil {
+		if rows, err := database.Query(query); err != nil {
 			return nil, err
 		} else {
 			defer rows.Close()
@@ -109,11 +110,11 @@ func GetAlt(where string, offset, limit int) ([]Lc, error) {
 }
 
 func Count(where string) (int, error) {
-	if db, err := sql.Open("mysql", dbString); err != nil {
+	if database, err := sql.Open("mysql", dbString); err != nil {
 		return 0, err
 	} else {
-		defer db.Close()
-		if row, err := db.Query("SELECT COUNT(*) FROM lcs " + where); err != nil {
+		defer database.Close()
+		if row, err := database.Query("SELECT COUNT(*) FROM lcs " + where); err != nil {
 			return 0, err
 		} else {
 			defer row.Close()
