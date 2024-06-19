@@ -248,12 +248,13 @@ func lcIndex(c *gin.Context) {
 	params := c.Request.URL.Query()
 	perPageParam := c.DefaultQuery("perPage", "10")
 	pageParam := c.DefaultQuery("page", "1")
-
+	orderByParam := c.DefaultQuery("orderBy", "date_issued")
+	orderParam := c.DefaultQuery("order", "ASC")
 	var err error
 	var perPage, page, skip, total int
 	var lcArr []lcs.Lc
 
-	url := c.Request.URL.Path + fmt.Sprintf("?perPage=%s&page=", perPageParam)
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
 	filters := utilities.GetFilters(c, params)
 
 	perPage, err = strconv.Atoi(perPageParam)
@@ -264,7 +265,7 @@ func lcIndex(c *gin.Context) {
 	}
 
 	if err == nil {
-		lcArr, err = lcs.GetAlt(filters.ToSql(), skip, perPage)
+		lcArr, err = lcs.GetAlt(filters.ToSql(), orderParam, orderByParam, skip, perPage)
 	}
 
 	if err == nil {
@@ -294,13 +295,13 @@ func lcIndex(c *gin.Context) {
 		Page:       page,
 		Total:      total,
 		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
 	}
 
 	respond(c, map[string]any{
-		"perPage": perPageParam, "page": pageParam,
-		"filters": filters,
-		"err":     err,
-		"lcs":     results,
+		"err": err,
+		"lcs": results,
 	})
 }
 

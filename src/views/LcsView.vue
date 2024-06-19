@@ -1,14 +1,19 @@
 <template>
     <AppHeader />
     <div class="w-full px-5">
-      <TableView 
+      <TableView
+        v-if="pageData?.lcs" 
         :columns="columns"
         :items="pageData?.lcs.items"
         :links="pageData?.lcs.links"
         :page="pageData?.lcs.page"
         :perPage="pageData?.lcs.per_page"
-        :uniqueField="'lc_num'"
+        :total="pageData?.lcs.total"
+        uniqueField="lc_num"
+        :orderBy="pageData?.lcs.order_by"
+        :order="pageData?.lcs.order"
         @changePageSize="changePageSize"
+        @changeOrder="reorder"
       />
     </div>
 </template>
@@ -71,6 +76,27 @@ export default {
         this.$router.push(path)
       }
     },
+
+    reorder({orderBy, order}) {
+      let { search, pathname } = window.location
+
+      if (search == "") {
+        this.$router.push(`${pathname}?orderBy=${orderBy}&order=${order}`)  
+      } else {
+        let orderByRegex = /orderBy=\w+/
+        let orderRegex = /order=\w+/
+
+        let path = (pathname + search)
+          .replace(orderByRegex, "orderBy=" + orderBy)
+        if (path.includes('order=')) {
+          path = path.replace(orderRegex, 'order=' + order)
+        } else {
+          path = path + '&order=' + order
+        }
+
+        this.$router.push(path)
+      }
+    }
   }
 }
 

@@ -16,7 +16,26 @@
                     class="py-2 text-sm"
                     :key="key"
                 >
-                    <div>{{ label }}</div>
+                    <div>
+                        {{ label }}
+                        <span v-if="key == orderBy && 'ASC' == order" 
+                            @click="() => { $emit('changeOrder', {orderBy: key, order: 'DESC'}) }"
+                            class="material-symbols-outlined align-middle text-gray-500"
+                        >
+                            keyboard_arrow_up
+                        </span>
+                        <span v-if="key == orderBy && 'DESC' == order" 
+                            @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
+                            class="material-symbols-outlined align-middle text-gray-500"
+                        >
+                            keyboard_arrow_down
+                        </span>
+                        <span v-if="key != orderBy" class="material-symbols-outlined align-middle text-gray-300"
+                            @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
+                        >
+                            swap_vert
+                        </span>
+                    </div>
                 </th>
             </tr>
         </thead>
@@ -61,12 +80,13 @@
                     :to="previousLink?.link ?? '/404'"
                     :disabled="previousLink == null"
                     :class="{
-                      'text-center rounded pt-0.5 min-w-8 h-8 px-1 border' : true,
+                      'text-center rounded pt-1 min-w-8 h-8 px-1 border' : true,
                       'bg-gray-100 hover:border-purple-600 hover:text-purple-600': previousLink != null,  
                       'bg-gray-200': previousLink == null  
                     }"
                   >
-                    <i class="lni lni-chevron-left align-middle"></i>
+                  <span class="material-symbols-outlined">chevron_left</span>
+
                   </AnchorLink>
                   <AnchorLink
                     v-for="link in links"
@@ -85,12 +105,12 @@
                     :to="nextLink?.link ?? '/404'"
                     :disabled="nextLink == null"
                     :class="{
-                      'text-center rounded pt-0.5 min-w-8 h-8 px-1 ml-2 border' : true,
+                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2 border' : true,
                       'bg-gray-100 hover:border-purple-600 hover:text-purple-600': nextLink != null,
                       'bg-gray-200': nextLink == null
                     }"
                   >
-                    <i class="lni lni-chevron-right align-middle"></i>
+                    <span class="material-symbols-outlined">chevron_right</span>
                   </AnchorLink>
                 </div>
               </div>
@@ -109,7 +129,7 @@ export default {
         AnchorLink
     },
 
-    emits: ['changePageSize'],
+    emits: ['changePageSize', 'changeOrder'],
 
     props: {
         columns: Array,
@@ -118,6 +138,8 @@ export default {
         uniqueField: String,
         perPage: Number,
         total: Number,
+        orderBy: String,
+        order: String,
         page: Number,
         currentPerPage: Number,
     },
@@ -205,6 +227,6 @@ export default {
 
             this.selected = [...things]
         }
-  }
+    }
 }
 </script>

@@ -14,7 +14,7 @@ func GetFilters(c *gin.Context, p url.Values) Filters {
 
 	for k := range p {
 		switch {
-		case k == "perPage" || k == "page":
+		case k == "perPage" || k == "page" || k == "orderBy" || k == "order":
 			continue
 		default:
 			f[k], _ = c.GetQuery(k)

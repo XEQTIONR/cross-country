@@ -8,6 +8,8 @@ type PaginatedResults[T any] struct {
 	TotalPages int              `json:"total_pages"`
 	Filters    Filters          `json:"filters"`
 	Links      []PaginationLink `json:"links"`
+	OrderBy    string           `json:"order_by"`
+	Order      string           `json:"order"`
 }
 
 type PaginationLink struct {

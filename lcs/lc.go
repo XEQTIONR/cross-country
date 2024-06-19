@@ -76,14 +76,20 @@ func Get(where, offset, limit string) ([]Lc, error) {
 	return lcs, err
 }
 
-func GetAlt(where string, offset, limit int) ([]Lc, error) {
-	var lcs []Lc = []Lc{}
-
+func GetAlt(where, order, orderBy string, offset, limit int) ([]Lc, error) {
+	var (
+		lcs   []Lc = []Lc{}
+		query string
+	)
 	if database, err := sql.Open("mysql", dbString); err != nil {
 		return nil, err
 	} else {
 		defer database.Close()
-		query := "SELECT * FROM lcs " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
+		if orderBy == "" {
+			query = "SELECT * FROM lcs " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
+		} else {
+			query = "SELECT * FROM lcs " + where + " ORDER BY " + orderBy + " " + order + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
+		}
 		if rows, err := database.Query(query); err != nil {
 			return nil, err
 		} else {
