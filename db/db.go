@@ -18,7 +18,7 @@ func GetDBString() string {
 		user := os.Getenv("DB_USERNAME")
 		pass := os.Getenv("DB_PASSWORD")
 
-		return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, pass, host, port, name)
+		return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=UTC", user, pass, host, port, name)
 	}
 
 	return ""

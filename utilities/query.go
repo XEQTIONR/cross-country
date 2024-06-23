@@ -40,6 +40,8 @@ func (f Filters) ToSql() string {
 			clause = field + " <= " + v
 		case "eq":
 			clause = field + " = " + v
+		case "neq":
+			clause = field + " <> " + v
 		case "gte":
 			clause = field + " >= " + v
 		case "gt":

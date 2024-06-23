@@ -20,17 +20,17 @@
                         {{ label }}
                         <span v-if="key == orderBy && 'ASC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'DESC'}) }"
-                            class="material-symbols-outlined align-middle text-gray-500"
+                            class="material-symbols-outlined align-middle text-gray-500 cursor-pointer"
                         >
                             keyboard_arrow_up
                         </span>
                         <span v-if="key == orderBy && 'DESC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
-                            class="material-symbols-outlined align-middle text-gray-500"
+                            class="material-symbols-outlined align-middle text-gray-500 cursor-pointer"
                         >
                             keyboard_arrow_down
                         </span>
-                        <span v-if="key != orderBy" class="material-symbols-outlined align-middle text-gray-300"
+                        <span v-if="key != orderBy" class="material-symbols-outlined align-middle text-gray-300 cursor-pointer"
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
                         >
                             swap_vert
@@ -51,17 +51,18 @@
                         @change="({target}) => { toggleSelection(target.checked, item[uniqueField]) }">
                 </td>
 
-                <td v-for="{key} in columns"
+                <td v-for="{key, formatter} in columns"
                     :key="item[uniqueField] + '-' + key"
                     class="text-sm text-center px-2 py-3"
                 >
-                    {{ item[key] }}
+                    <div v-if="formatter">{{ formatters[formatter](item[key]) }}</div>
+                    <div v-else>{{ item[key] }}</div>
                 </td>
             </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="8">
+            <td :colspan="columns.length + 1">
               <div class="flex">
                 <div class="w-1/3 pl-4 py-2 text-sm">
                   Per page 
@@ -122,7 +123,7 @@
 
 <script>
 import AnchorLink from '@/components/AnchorLink.vue';
-
+import { currencyFormatter, dateFormatter, dateTimeFormatter } from '@/composables/formatter';
 export default {
 
     components: {
@@ -147,6 +148,11 @@ export default {
     data() {
         return {
             selected: [],
+            formatters: {
+                currency: currencyFormatter,
+                date: dateFormatter,
+                dateTime: dateTimeFormatter,
+            }
         }
     },
 
