@@ -1,15 +1,7 @@
 <template>
     <form class="w-full flex flex-col p-2">
         <h2 class="text-lg font-bold mb-4">Filters</h2>
-        <!-- <div v-for="{key, label} in columns" :key="key" class="w-full flex flex-col pb-1 mb-4">
-            <label>{{ label }}</label>
-            <div class="w-full flex justify-start">
-              <select class="border w-1/4 mr-1">
-                <option v-for="{value, label} in ops" :value="value" :key="value">{{ label }}</option>
-              </select>
-              <input class="border w-3/4" type="text" >
-            </div>
-        </div> -->
+
         <div class="w-full flex flex-col pb-1 mb-4">
             <div
                 v-for="(filter, index) in filters"
@@ -60,13 +52,14 @@ export default {
     
     emits: ['submit'],
     props: {
-        columns: Array
+        columns: Array,
+        initVal: Array
     },
 
     data() {
         return {
             ops: opsAlias,
-            filters: [],
+            filters: this.initVal,
 
             dataTypeMap : {
                 "currency" : "number"
@@ -86,7 +79,6 @@ export default {
         },
 
         removeFilter(idx) {
-            console.log(`removeFilter(${idx})`)
             this.filters.splice(idx, 1)
         },
 
@@ -95,7 +87,6 @@ export default {
         },
 
         submitFilters() {
-            console.log(this.filters)
 
             const qStr = this.filters.map(({field, op, value, formatter}) => {
                 let opS = this.ops.find(o => o.value == op)
@@ -105,8 +96,6 @@ export default {
                 }
                 return `${field}.${opS.qStr}=${value}`
             }).join('&')
-
-            console.log(qStr)
 
             this.$emit('submit', qStr)
         }

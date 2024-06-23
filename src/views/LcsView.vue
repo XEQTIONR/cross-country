@@ -1,6 +1,6 @@
 <template>
     <SidePanel :open="sidePanelOpen" @close="toggleSidePanel">
-      <FiltersForm @submit="filter" :columns="columns" />
+      <FiltersForm :initVal="getQFilters" @submit="filter" :columns="columns" />
     </SidePanel>
     <AppHeader />
     <div class="w-full px-5 flex justify-end">
@@ -37,6 +37,8 @@ import TableView from '@/components/TableView.vue'
 import SidePanel from '@/components/SidePanel.vue'
 import FiltersForm from '@/components/FiltersForm.vue'
 
+import { ops } from '@/composables/operations.js'
+
 export default {
   
   beforeRouteEnter (to, from, next) {
@@ -71,6 +73,41 @@ export default {
       ],
       sidePanelOpen: false,
     }
+  },
+
+  computed: {
+    getQFilters() {
+      const { href } = window.location
+      let params = (new URL(href)).searchParams
+
+      let filters = []
+
+      for (const [key, value] of params) {
+        
+        if ( key.indexOf(".") > 0 ) {
+          const [field, oper] = key.split(".")
+          const {formatter} = this.columns.find(col => col.key == field)
+          let val = null
+
+          switch (formatter) {
+            case "currency":
+              val = parseFloat(value)
+              break;
+            default:
+              val = value.substring(1, value.length - 1)
+          }
+
+          filters.push({
+            field,
+            op: ops.find(item => item.qStr == oper).value,
+            value: val,
+            formatter
+          })
+        }
+      }
+
+      return filters
+    },
   },
 
   methods: {
@@ -140,8 +177,8 @@ export default {
 
         let path = (pathname + search)
 
-        if(path.includes('orderBy=')) {
-          path.replace(orderByRegex, "orderBy=" + orderBy)
+        if (path.includes('orderBy=')) {
+          path = path.replace(orderByRegex, "orderBy=" + orderBy)
         } else {
           path += '&orderBy=' + orderBy
         }
