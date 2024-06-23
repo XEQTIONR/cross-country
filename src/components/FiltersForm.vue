@@ -54,6 +54,8 @@
 </template>
 <script>
 
+import {ops as opsAlias} from '@/composables/operations.js'
+
 export default {
     
     emits: ['submit'],
@@ -63,15 +65,7 @@ export default {
 
     data() {
         return {
-            ops: [
-                {value: "=", label: "=", qStr: "eq"},
-                {value: "<>", label: "!=", qStr: "neq"},
-                {value: ">=", label: "≥", qStr: "gte"},
-                {value: ">", label: ">", qStr: "gt"},
-                {value: "<=", label: "≤", qStr: "lte"},
-                {value: "<", label: "<", qStr: "lt"},
-                {value: "LIKE ", label: "LIKE", qStr: "like"},
-            ],
+            ops: opsAlias,
             filters: [],
 
             dataTypeMap : {

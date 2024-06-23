@@ -83,15 +83,23 @@ export default {
     },
 
     filter(qStr) {
-      const { search, pathname } = window.location
-      let url = ""
+      const { pathname, href } = window.location
+
+      let params = (new URL(href)).searchParams
+      let url = "?"
+      
+      for (const [key, value] of params) { // get non filter params
+        console.log(key, value)
+        if ( key.indexOf(".") == -1 ) {
+          if (url != "") {
+            url+= "&"
+          }
+          url += `${key}=${value}`
+        }
+      }
       this.closeSidePanel()
 
-      if (search == "") {
-        url = pathname + "?perPage=25&page=1"
-      } else {
-        url = pathname
-      }
+      url = pathname + url 
 
       if (qStr !== "") {
         url += `&${qStr}`
@@ -106,11 +114,10 @@ export default {
       if (search == "") {
         this.$router.push(pathname + "?perPage=" + target.value)
       } else {
-        let regex = /perPage=\d+/
-        let pageRegex = /page=\d+/
+        const regex = /perPage=\d+/
+        const pageRegex = /page=\d+/
 
-        let path = (pathname + search)
-          .replace(regex, "perPage=" + target.value)
+        let path = (pathname + search).replace(regex, "perPage=" + target.value)
 
         if (path.includes('page=')) {
           path = path.replace(pageRegex, 'page=1')
@@ -128,15 +135,20 @@ export default {
       if (search == "") {
         this.$router.push(`${pathname}?orderBy=${orderBy}&order=${order}`)  
       } else {
-        let orderByRegex = /orderBy=\w+/
-        let orderRegex = /order=\w+/
+        const orderByRegex = /orderBy=\w+/
+        const orderRegex = /order=\w+/
 
         let path = (pathname + search)
-          .replace(orderByRegex, "orderBy=" + orderBy)
+
+        if(path.includes('orderBy=')) {
+          path.replace(orderByRegex, "orderBy=" + orderBy)
+        } else {
+          path += '&orderBy=' + orderBy
+        }
         if (path.includes('order=')) {
           path = path.replace(orderRegex, 'order=' + order)
         } else {
-          path = path + '&order=' + order
+          path += '&order=' + order
         }
 
         this.$router.push(path)
