@@ -92,7 +92,7 @@ export default {
           switch (formatter) {
             case "currency":
               val = parseFloat(value)
-              break;
+              break
             default:
               val = value.substring(1, value.length - 1)
           }

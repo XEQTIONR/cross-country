@@ -62,7 +62,9 @@ export default {
             filters: this.initVal,
 
             dataTypeMap : {
-                "currency" : "number"
+                "currency" : "number",
+                "date" : "date",
+                "dateTime" : "datetime-local"
             }
         }
     },
@@ -91,7 +93,12 @@ export default {
             const qStr = this.filters.map(({field, op, value, formatter}) => {
                 let opS = this.ops.find(o => o.value == op)
 
-                if (formatter == null) {
+                if (formatter == null || formatter == 'date') {
+                    return `${field}.${opS.qStr}='${value}'`
+                }
+
+                if (formatter == 'dateTime') {
+                    value = (new Date(value)).toISOString().replace('T', ' ').replace(/\.\d+Z/, '')
                     return `${field}.${opS.qStr}='${value}'`
                 }
                 return `${field}.${opS.qStr}=${value}`
