@@ -1,5 +1,5 @@
 <template>
-    <SidePanel :open="sidePanelOpen" @close="toggleSidePanel">
+    <SidePanel side="R" :open="sidePanelOpen" @close="toggleSidePanel">
       <FiltersForm :initVal="getQFilters" @submit="filter" :columns="columns" />
     </SidePanel>
     <AppHeader />
