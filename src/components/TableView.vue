@@ -1,8 +1,8 @@
 <template>
-    <table class="w-full border">
+    <table class="w-full h-screen border">
         <thead class="border-b">
             <tr>
-                <th class="w-12">
+                <th class="w-12 sticky top-12 bg-white">
                     <div>
                         <input 
                             :checked="allChecked"
@@ -13,7 +13,7 @@
                 </th>
                 <th 
                     v-for="{key, label} in columns"
-                    class="py-2 text-sm"
+                    class="py-2 text-sm sticky top-12 bg-white"
                     :key="key"
                 >
                     <div>
@@ -61,7 +61,7 @@
             </tr>
         </tbody>
         <tfoot>
-          <tr>
+          <tr class="sticky bottom-0 bg-white">
             <td :colspan="columns.length + 1">
               <div class="flex">
                 <div class="w-1/3 pl-4 py-2 text-sm">

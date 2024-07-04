@@ -2,32 +2,39 @@
     <SidePanel side="R" :open="sidePanelOpen" @close="toggleSidePanel">
       <FiltersForm :initVal="getQFilters" @submit="filter" :columns="columns" />
     </SidePanel>
-    <AppHeader />
-    <div class="w-full px-5 flex justify-end">
-      <button 
-        class="hover:bg-gray-100 bg-gray-200 hover:text-purple-400 text-gray-500 border hover:border-purple-400 border-gray-200 pt-1 px-1 mb-1 rounded text-sm"
-        @click="toggleSidePanel"
-      >
-        <span class="material-symbols-outlined">
-          filter_alt
-        </span>
-      </button>
-    </div>
-    <div class="w-full px-5">
-      <TableView
-        v-if="pageData?.lcs"
-        :columns="columns"
-        :items="pageData?.lcs.items"
-        :links="pageData?.lcs.links"
-        :page="pageData?.lcs.page"
-        :perPage="pageData?.lcs.per_page"
-        :total="pageData?.lcs.total"
-        uniqueField="lc_num"
-        :orderBy="pageData?.lcs.order_by"
-        :order="pageData?.lcs.order"
-        @changePageSize="changePageSize"
-        @changeOrder="reorder"
-      />
+    
+    <div :class="[
+        'w-full flex flex-nowrap',
+        sidePanelOpen ? 'h-screen overflow-y-hidden' : ''
+      ]">
+      <NavBar />
+      <div class="w-full px-2">
+        <div class="w-full flex justify-between items-center sticky top-0 bg-white">
+          <h1 class="text-xl ml-0.5">Letters of Credit</h1>
+          <button 
+            class="hover:bg-gray-100 bg-gray-200 hover:text-purple-400 text-gray-500 border hover:border-purple-400 border-gray-200 pt-1 px-1 my-2 rounded text-sm"
+            @click="toggleSidePanel"
+          >
+            <span class="material-symbols-outlined">
+              filter_alt
+            </span>
+          </button>
+        </div>
+        <TableView
+          v-if="pageData?.lcs"
+          :columns="columns"
+          :items="pageData?.lcs.items"
+          :links="pageData?.lcs.links"
+          :page="pageData?.lcs.page"
+          :perPage="pageData?.lcs.per_page"
+          :total="pageData?.lcs.total"
+          uniqueField="lc_num"
+          :orderBy="pageData?.lcs.order_by"
+          :order="pageData?.lcs.order"
+          @changePageSize="changePageSize"
+          @changeOrder="reorder"
+        />
+      </div>
     </div>
 </template>
 
@@ -36,6 +43,7 @@ import AppHeader from '@/components/Header.vue'
 import TableView from '@/components/TableView.vue'
 import SidePanel from '@/components/SidePanel.vue'
 import FiltersForm from '@/components/FiltersForm.vue'
+import NavBar from '@/components/NavBar.vue'
 
 import { ops } from '@/composables/operations.js'
 
@@ -55,6 +63,7 @@ export default {
     FiltersForm,
     TableView,
     SidePanel,
+    NavBar,
   },
 
   data () {

@@ -1,6 +1,6 @@
 <template>
 
-<div id="outerPanel" :class="outerPanelClasses"
+<div id="outerPanel" class="w-full h-full z-10 p-0 m-0 absolute bg-black bg-opacity-50 overflow-hidden hidden"
     @click="close"
 >
 <div id="innerPanel" :class="innerPanelClasses"
@@ -23,11 +23,6 @@ export default {
     emits: [ 'close' ],
 
     computed: {
-        defaultClasses() {
-            if (this.side == 'R') 
-                return 'h-screen w-96 bg-slate-400 transition ease-in-out absolute top-0 left-0'
-            return 'h-screen w-96 bg-slate-400 transition ease-in-out absolute top-0 right-0'
-        },
         openClass() { 
             return 'translate-x-0'
         },
@@ -36,13 +31,10 @@ export default {
                 return 'translate-x-96' 
             return '-translate-x-96' 
         },
-        outerPanelClasses() {
-            return "w-screen h-screen absolute bg-black bg-opacity-50 hidden"
-        },
         innerPanelClasses() {
             if (this.side == 'R') 
-                return "h-screen w-96 bg-white transition ease-in-out absolute top-0 right-0 translate-x-96 border-r-2"
-            return "h-screen w-96 bg-white transition ease-in-out absolute top-0 left-0 -translate-x-96 border-l-2"
+                return "overflow-hidden h-screen w-96 bg-white transition ease-in-out absolute top-0 right-0 translate-x-96 border-r-2"
+            return "overflow-hidden h-screen w-96 bg-white transition ease-in-out absolute top-0 left-0 -translate-x-96 border-l-2"
         }
     },
 
