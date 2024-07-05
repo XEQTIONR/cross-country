@@ -20,17 +20,17 @@
                         {{ label }}
                         <span v-if="key == orderBy && 'ASC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'DESC'}) }"
-                            class="material-symbols-outlined align-middle text-gray-500 cursor-pointer"
+                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer"
                         >
                             keyboard_arrow_up
                         </span>
                         <span v-if="key == orderBy && 'DESC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
-                            class="material-symbols-outlined align-middle text-gray-500 cursor-pointer"
+                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer"
                         >
                             keyboard_arrow_down
                         </span>
-                        <span v-if="key != orderBy" class="material-symbols-outlined align-middle text-gray-300 cursor-pointer"
+                        <span v-if="key != orderBy" class="material-symbols-rounded align-middle text-gray-300 cursor-pointer"
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
                         >
                             swap_vert
@@ -86,7 +86,7 @@
                       'bg-gray-200': previousLink == null  
                     }"
                   >
-                  <span class="material-symbols-outlined">chevron_left</span>
+                  <span class="material-symbols-rounded">chevron_left</span>
 
                   </AnchorLink>
                   <AnchorLink
@@ -111,7 +111,7 @@
                       'bg-gray-200': nextLink == null
                     }"
                   >
-                    <span class="material-symbols-outlined">chevron_right</span>
+                    <span class="material-symbols-rounded">chevron_right</span>
                   </AnchorLink>
                 </div>
               </div>

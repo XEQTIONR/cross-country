@@ -26,13 +26,13 @@
                 <button 
                     @click.prevent="() => removeFilter(index)"
                     class="w-1/8 rounded px-1.5 pt-0.5 bg-red-500">
-                    <span class="material-symbols-outlined text-white text-sm">
+                    <span class="material-symbols-rounded text-white text-sm">
                         close
                     </span>
                 </button>
             </div>
             <button @click.prevent="addFilter" class="bg-transparent shadow hover:shadow-lg hover:bg-blue-50 border-2 border-blue-500  text-blue-500  mt-2 py-0.5 rounded">
-                <span class="material-symbols-outlined text-lg align-middle">
+                <span class="material-symbols-rounded text-lg align-middle">
                     add
                 </span>
                 Add a filter

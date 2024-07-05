@@ -12,10 +12,10 @@
         <div class="w-full flex justify-between items-center sticky top-0 bg-white">
           <h1 class="text-xl ml-0.5">Letters of Credit</h1>
           <button 
-            class="hover:bg-gray-100 bg-gray-200 hover:text-purple-400 text-gray-500 border hover:border-purple-400 border-gray-200 pt-1 px-1 my-2 rounded text-sm"
+            class="hover:bg-gray-100 bg-gray-200 hover:text-purple-400 text-gray-500 border hover:border-purple-400 border-gray-200 pt-1 px-1 my-2 rounded text-sm shadow-lg"
             @click="toggleSidePanel"
           >
-            <span class="material-symbols-outlined">
+            <span class="material-symbols-rounded">
               filter_alt
             </span>
           </button>
