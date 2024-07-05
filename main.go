@@ -1,10 +1,9 @@
 package main
 
 import (
-	"cross-country/consignments"
-	"cross-country/lcs"
 	"cross-country/mail"
 	"cross-country/middleware"
+	"cross-country/models"
 	"cross-country/users"
 	"cross-country/utilities"
 	"encoding/gob"
@@ -253,7 +252,8 @@ func consignmentIndex(c *gin.Context) {
 	orderParam := c.DefaultQuery("order", "DESC")
 	var err error
 	var perPage, page, skip, total int
-	var cArr []consignments.Consignment
+	var cArr []models.Consignment
+	var consignment models.Consignment
 
 	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
 	filters := utilities.GetFilters(c, params)
@@ -266,11 +266,11 @@ func consignmentIndex(c *gin.Context) {
 	}
 
 	if err == nil {
-		cArr, err = consignments.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+		cArr, err = consignment.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
 	}
 
 	if err == nil {
-		total, err = consignments.Count(filters.ToSql())
+		total, err = consignment.Count(filters.ToSql())
 	}
 
 	links := []utilities.PaginationLink{}
@@ -288,7 +288,7 @@ func consignmentIndex(c *gin.Context) {
 		})
 	}
 
-	results := utilities.PaginatedResults[consignments.Consignment]{
+	results := utilities.PaginatedResults[models.Consignment]{
 		Items:      cArr,
 		Filters:    filters,
 		PerPage:    perPage,
@@ -314,7 +314,8 @@ func lcIndex(c *gin.Context) {
 	orderParam := c.DefaultQuery("order", "ASC")
 	var err error
 	var perPage, page, skip, total int
-	var lcArr []lcs.Lc
+	var lcArr []models.Lc
+	var lc models.Lc
 
 	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
 	filters := utilities.GetFilters(c, params)
@@ -327,11 +328,11 @@ func lcIndex(c *gin.Context) {
 	}
 
 	if err == nil {
-		lcArr, err = lcs.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+		lcArr, err = lc.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
 	}
 
 	if err == nil {
-		total, err = lcs.Count(filters.ToSql())
+		total, err = lc.Count(filters.ToSql())
 	}
 
 	links := []utilities.PaginationLink{}
@@ -349,7 +350,7 @@ func lcIndex(c *gin.Context) {
 		})
 	}
 
-	results := utilities.PaginatedResults[lcs.Lc]{
+	results := utilities.PaginatedResults[models.Lc]{
 		Items:      lcArr,
 		Filters:    filters,
 		PerPage:    perPage,

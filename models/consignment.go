@@ -1,15 +1,10 @@
-package consignments
+package models
 
 import (
 	"cross-country/db"
 	"database/sql"
 	"strconv"
 	"time"
-)
-
-var (
-	dbString  = db.GetDBString()
-	TableName = "consignments"
 )
 
 type Consignment struct {
@@ -24,12 +19,12 @@ type Consignment struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func Get(where, order, orderBy string, offset, limit int) ([]Consignment, error) {
+func (c Consignment) Get(where, order, orderBy string, offset, limit int) ([]Consignment, error) {
 	var (
 		consignments []Consignment
 		query        string
 	)
-	if database, err := sql.Open("mysql", dbString); err != nil {
+	if database, err := sql.Open("mysql", db.GetDBString()); err != nil {
 		return nil, err
 	} else {
 		defer database.Close()
@@ -56,6 +51,6 @@ func Get(where, order, orderBy string, offset, limit int) ([]Consignment, error)
 	}
 }
 
-func Count(where string) (int, error) {
-	return db.Count(where, TableName)
+func (c Consignment) Count(where string) (int, error) {
+	return db.Count(where, "consignments")
 }

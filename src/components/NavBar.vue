@@ -7,7 +7,7 @@
     >
         <div class="w-full flex items-center sticky top-1">
             <button 
-                class="border hover:border-gray-400 text-gray-600 rounded mx-3"
+                class="border hover:border-red-400 hover:text-red-400  rounded mx-3"
                 @click="toggle"
             >
                 <span class="material-symbols-rounded px-1.5 pt-1.5 pb-1 align-text-bottom">
@@ -15,7 +15,7 @@
                 </span>
             </button>
             <span :class="[
-                'transition text-nowrap',
+                'transition text-nowrap font-bold',
                 open ? 'w-full' : 'w-0 opacity-0'
             ]">Cross Country</span>
         </div>
@@ -26,17 +26,17 @@
             v-for="{label, link, icon} in links" 
             :class="[
                 'w-full flex items-center mb-3 py-1',
-                open ? 'hover:bg-gray-300' : '',
+                open && !isActive(link) ? 'hover:bg-red-300 hover:text-white' : '',
             ]"
             :key="link"
             :to="link"
         >
             <div  class="border border-transparent ml-3 flex items-center">
                 <span :class="[
-                    'material-symbols-rounded px-1.5 py-1.5 align-text-bottom rounded',
+                    'material-symbols-rounded px-1.5 py-1.5 align-text-bottom rounded ',
                     isActive(link) 
                         ? 'bg-red-400 text-white shadow-lg'
-                        : !open ? 'hover:bg-gray-300' : '',
+                        : !open ? ' hover:text-red-400' : '',
                 ]">
                     {{ icon }}
                 </span>

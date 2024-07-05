@@ -1,15 +1,10 @@
-package lcs
+package models
 
 import (
 	"cross-country/db"
 	"database/sql"
 	"strconv"
 	"time"
-)
-
-var (
-	dbString  = db.GetDBString()
-	TableName = "lcs"
 )
 
 type Lc struct {
@@ -33,23 +28,23 @@ type Lc struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (lc *Lc) SetLocalAmount() {
+func (lc *Lc) setLocalAmount() {
 	lc.LocalAmount = lc.ForeignAmount * lc.ExchangeRate
 }
 
-func Get(where, order, orderBy string, offset, limit int) ([]Lc, error) {
+func (lc Lc) Get(where, order, orderBy string, offset, limit int) ([]Lc, error) {
 	var (
 		lcs   []Lc = []Lc{}
 		query string
 	)
-	if database, err := sql.Open("mysql", dbString); err != nil {
+	if database, err := sql.Open("mysql", db.GetDBString()); err != nil {
 		return nil, err
 	} else {
 		defer database.Close()
 		if orderBy == "" {
-			query = "SELECT * FROM " + TableName + " " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
+			query = "SELECT * FROM lcs " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
 		} else {
-			query = "SELECT * FROM " + TableName + " " + where + " ORDER BY " + orderBy + " " + order + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
+			query = "SELECT * FROM lcs " + where + " ORDER BY " + orderBy + " " + order + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
 		}
 		if rows, err := database.Query(query); err != nil {
 			return nil, err
@@ -66,7 +61,7 @@ func Get(where, order, orderBy string, offset, limit int) ([]Lc, error) {
 
 					return nil, err
 				} else {
-					lc.SetLocalAmount()
+					lc.setLocalAmount()
 					lcs = append(lcs, lc)
 				}
 			}
@@ -76,6 +71,6 @@ func Get(where, order, orderBy string, offset, limit int) ([]Lc, error) {
 	}
 }
 
-func Count(where string) (int, error) {
-	return db.Count(where, TableName)
+func (lc Lc) Count(where string) (int, error) {
+	return db.Count(where, "lcs")
 }
