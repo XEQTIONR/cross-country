@@ -1,5 +1,5 @@
 <template>
-    <table class="w-full h-screen border">
+    <table class="w-full border">
         <thead class="border-b">
             <tr>
                 <th class="w-12 sticky top-12 bg-white">

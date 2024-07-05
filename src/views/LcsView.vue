@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import AppHeader from '@/components/Header.vue'
 import TableView from '@/components/TableView.vue'
 import SidePanel from '@/components/SidePanel.vue'
 import FiltersForm from '@/components/FiltersForm.vue'
 import NavBar from '@/components/NavBar.vue'
 
-import { ops } from '@/composables/operations.js'
+import { ops } from '@/composables/operations'
+import { changePageSize, reorder, filter } from '@/composables/qvars'
 
 export default {
   
@@ -59,7 +59,6 @@ export default {
   },
 
   components: {
-    AppHeader,
     FiltersForm,
     TableView,
     SidePanel,
@@ -128,78 +127,11 @@ export default {
       this.sidePanelOpen = false
     },
 
-    filter(qStr) {
-      const { pathname, href } = window.location
+    filter,
 
-      let params = (new URL(href)).searchParams
-      let url = "?"
-      
-      for (const [key, value] of params) { // get non filter params
-        console.log(key, value)
-        if ( key.indexOf(".") == -1 ) {
-          if (url != "") {
-            url+= "&"
-          }
-          url += `${key}=${value}`
-        }
-      }
-      this.closeSidePanel()
+    changePageSize,
 
-      url = pathname + url 
-
-      if (qStr !== "") {
-        url += `&${qStr}`
-      }
-
-      this.$router.push(url)
-    },
-
-    changePageSize({target}) {
-      let { search, pathname } = window.location
-
-      if (search == "") {
-        this.$router.push(pathname + "?perPage=" + target.value)
-      } else {
-        const regex = /perPage=\d+/
-        const pageRegex = /page=\d+/
-
-        let path = (pathname + search).replace(regex, "perPage=" + target.value)
-
-        if (path.includes('page=')) {
-          path = path.replace(pageRegex, 'page=1')
-        } else {
-          path = path + '&page=1'
-        }
-
-        this.$router.push(path)
-      }
-    },
-
-    reorder({orderBy, order}) {
-      let { search, pathname } = window.location
-
-      if (search == "") {
-        this.$router.push(`${pathname}?orderBy=${orderBy}&order=${order}`)  
-      } else {
-        const orderByRegex = /orderBy=\w+/
-        const orderRegex = /order=\w+/
-
-        let path = (pathname + search)
-
-        if (path.includes('orderBy=')) {
-          path = path.replace(orderByRegex, "orderBy=" + orderBy)
-        } else {
-          path += '&orderBy=' + orderBy
-        }
-        if (path.includes('order=')) {
-          path = path.replace(orderRegex, 'order=' + order)
-        } else {
-          path += '&order=' + order
-        }
-
-        this.$router.push(path)
-      }
-    }
+    reorder,
   }
 }
 
