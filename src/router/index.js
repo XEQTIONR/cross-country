@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import { useData } from '../composables/useData.js'
 import RegisterView from '@/views/RegisterView.vue'
 import LcsView from '@/views/LcsView.vue'
+import ConsignmentsView from '@/views/ConsignmentsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +55,11 @@ const router = createRouter({
       path: '/lcs',
       name: 'lcs.index',
       component: LcsView
+    },
+    {
+      path: '/consignments',
+      name: 'consignments.index',
+      component: ConsignmentsView
     }
   ]
 })

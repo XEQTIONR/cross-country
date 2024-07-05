@@ -35,48 +35,7 @@ func (lc *Lc) SetLocalAmount() {
 	lc.LocalAmount = lc.ForeignAmount * lc.ExchangeRate
 }
 
-func All() ([]Lc, error) {
-	return Get("", "", "")
-}
-
-func Get(where, offset, limit string) ([]Lc, error) {
-	var (
-		lcs      []Lc
-		err      error
-		database *sql.DB
-		rows     *sql.Rows
-	)
-
-	database, err = sql.Open("mysql", dbString)
-
-	if err == nil {
-		defer database.Close()
-		query := "SELECT * FROM lcs " + where + limit + offset
-		rows, err = database.Query(query)
-		if err == nil {
-			defer rows.Close()
-			for rows.Next() {
-				var lc Lc
-				err = rows.Scan(&lc.LcNumber, &lc.DateIssued, &lc.DateExpiry,
-					&lc.Applicant, &lc.Beneficiary, &lc.CurrencyCode,
-					&lc.ForeignAmount, &lc.ForeignExpense, &lc.DomesticExpense, &lc.ExchangeRate,
-					&lc.PortDepart, &lc.PortArrive,
-					&lc.InvoiceNo, &lc.Notes,
-					&lc.CreatedAt, &lc.UpdatedAt)
-
-				if err == nil {
-					lcs = append(lcs, lc)
-				} else {
-					break
-				}
-			}
-		}
-	}
-
-	return lcs, err
-}
-
-func GetAlt(where, order, orderBy string, offset, limit int) ([]Lc, error) {
+func Get(where, order, orderBy string, offset, limit int) ([]Lc, error) {
 	var (
 		lcs   []Lc = []Lc{}
 		query string
@@ -111,7 +70,7 @@ func GetAlt(where, order, orderBy string, offset, limit int) ([]Lc, error) {
 			}
 		}
 
-		return lcs, err
+		return lcs, nil
 	}
 }
 

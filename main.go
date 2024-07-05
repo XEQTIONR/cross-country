@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cross-country/consignments"
 	"cross-country/lcs"
 	"cross-country/mail"
 	"cross-country/middleware"
@@ -244,6 +245,67 @@ func respondWithError(c *gin.Context, data map[string]any, errorCode int) {
 	}
 }
 
+func consignmentIndex(c *gin.Context) {
+	params := c.Request.URL.Query()
+	perPageParam := c.DefaultQuery("perPage", "10")
+	pageParam := c.DefaultQuery("page", "1")
+	orderByParam := c.DefaultQuery("orderBy", "created_at")
+	orderParam := c.DefaultQuery("order", "DESC")
+	var err error
+	var perPage, page, skip, total int
+	var cArr []consignments.Consignment
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		cArr, err = consignments.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	if err == nil {
+		total, err = consignments.Count(filters.ToSql())
+	}
+
+	links := []utilities.PaginationLink{}
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+
+	for i := 1; i <= totalPages; i++ {
+		link := url + strconv.Itoa(i)
+		for k, v := range filters {
+			link = link + "&" + k + "=" + v
+		}
+		links = append(links, utilities.PaginationLink{
+			Label:         strconv.Itoa(i),
+			Link:          link,
+			IsCurrentPage: i == page,
+		})
+	}
+
+	results := utilities.PaginatedResults[consignments.Consignment]{
+		Items:      cArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	respond(c, map[string]any{
+		"err":          err,
+		"consignments": results,
+	})
+}
+
 func lcIndex(c *gin.Context) {
 	params := c.Request.URL.Query()
 	perPageParam := c.DefaultQuery("perPage", "10")
@@ -265,7 +327,7 @@ func lcIndex(c *gin.Context) {
 	}
 
 	if err == nil {
-		lcArr, err = lcs.GetAlt(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+		lcArr, err = lcs.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
 	}
 
 	if err == nil {
@@ -324,6 +386,8 @@ func main() {
 		gob.Register(&map[string]string{}) // why do we need this?
 
 		r.GET("/lcs", lcIndex)
+
+		r.GET("/consignments", consignmentIndex)
 
 		r.GET("/", func(c *gin.Context) {
 			session := sessions.Default(c)
