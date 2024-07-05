@@ -3,12 +3,14 @@ package consignments
 import (
 	"cross-country/db"
 	"database/sql"
-	"errors"
 	"strconv"
 	"time"
 )
 
-var dbString = db.GetDBString()
+var (
+	dbString  = db.GetDBString()
+	TableName = "consignments"
+)
 
 type Consignment struct {
 	BOL          string  `json:"bol"`
@@ -55,25 +57,5 @@ func Get(where, order, orderBy string, offset, limit int) ([]Consignment, error)
 }
 
 func Count(where string) (int, error) {
-	if database, err := sql.Open("mysql", dbString); err != nil {
-		return 0, err
-	} else {
-		defer database.Close()
-		if row, err := database.Query("SELECT COUNT(*) FROM consignments " + where); err != nil {
-			return 0, err
-		} else {
-			defer row.Close()
-			if row.Next() {
-				var count int
-
-				if err := row.Scan(&count); err != nil {
-					return 0, err
-				}
-
-				return count, nil
-			}
-
-			return 0, errors.New("no more rows")
-		}
-	}
+	return db.Count(where, TableName)
 }

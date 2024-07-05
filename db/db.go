@@ -1,6 +1,8 @@
 package db
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 
@@ -22,4 +24,28 @@ func GetDBString() string {
 	}
 
 	return ""
+}
+
+func Count(where, table string) (int, error) {
+	if database, err := sql.Open("mysql", GetDBString()); err != nil {
+		return 0, err
+	} else {
+		defer database.Close()
+		if row, err := database.Query("SELECT COUNT(*) FROM " + table + " " + where); err != nil {
+			return 0, err
+		} else {
+			defer row.Close()
+			if row.Next() {
+				var count int
+
+				if err := row.Scan(&count); err != nil {
+					return 0, err
+				}
+
+				return count, nil
+			}
+
+			return 0, errors.New("no more rows")
+		}
+	}
 }

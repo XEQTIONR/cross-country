@@ -3,12 +3,14 @@ package lcs
 import (
 	"cross-country/db"
 	"database/sql"
-	"errors"
 	"strconv"
 	"time"
 )
 
-var dbString = db.GetDBString()
+var (
+	dbString  = db.GetDBString()
+	TableName = "lcs"
+)
 
 type Lc struct {
 	LcNumber        string  `json:"lc_num"`
@@ -45,9 +47,9 @@ func Get(where, order, orderBy string, offset, limit int) ([]Lc, error) {
 	} else {
 		defer database.Close()
 		if orderBy == "" {
-			query = "SELECT * FROM lcs " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
+			query = "SELECT * FROM " + TableName + " " + where + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
 		} else {
-			query = "SELECT * FROM lcs " + where + " ORDER BY " + orderBy + " " + order + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
+			query = "SELECT * FROM " + TableName + " " + where + " ORDER BY " + orderBy + " " + order + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
 		}
 		if rows, err := database.Query(query); err != nil {
 			return nil, err
@@ -75,25 +77,5 @@ func Get(where, order, orderBy string, offset, limit int) ([]Lc, error) {
 }
 
 func Count(where string) (int, error) {
-	if database, err := sql.Open("mysql", dbString); err != nil {
-		return 0, err
-	} else {
-		defer database.Close()
-		if row, err := database.Query("SELECT COUNT(*) FROM lcs " + where); err != nil {
-			return 0, err
-		} else {
-			defer row.Close()
-			if row.Next() {
-				var count int
-
-				if err := row.Scan(&count); err != nil {
-					return 0, err
-				}
-
-				return count, nil
-			}
-
-			return 0, errors.New("no more rows")
-		}
-	}
+	return db.Count(where, TableName)
 }
