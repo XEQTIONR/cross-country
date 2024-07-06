@@ -23,12 +23,12 @@ func respond(c *gin.Context, data map[string]any) {
 	}
 }
 
-func getParams(c *gin.Context) (url.Values, string, string, string, string) {
+func getParams(c *gin.Context, orderBy, order string) (url.Values, string, string, string, string) {
 	return c.Request.URL.Query(),
 		c.DefaultQuery("perPage", "10"),
 		c.DefaultQuery("page", "1"),
-		c.DefaultQuery("orderBy", "created_at"),
-		c.DefaultQuery("order", "DESC")
+		c.DefaultQuery("orderBy", orderBy),
+		c.DefaultQuery("order", order)
 }
 
 func getPaginationLinks(totalPages, page int, url string, filters utilities.Filters) []utilities.PaginationLink {
@@ -49,7 +49,7 @@ func getPaginationLinks(totalPages, page int, url string, filters utilities.Filt
 }
 
 func ConsignmentIndex(c *gin.Context) {
-	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c)
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "created_at", "DESC")
 	var err error
 	var perPage, page, skip, total int
 	var cArr []models.Consignment
@@ -104,7 +104,7 @@ func ConsignmentIndex(c *gin.Context) {
 }
 
 func ContainerIndex(c *gin.Context) {
-	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c)
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "created_at", "DESC")
 	var err error
 	var perPage, page, skip, total int
 	var cArr []models.Container
@@ -159,11 +159,7 @@ func ContainerIndex(c *gin.Context) {
 }
 
 func CustomerIndex(c *gin.Context) {
-	params := c.Request.URL.Query()
-	perPageParam := c.DefaultQuery("perPage", "10")
-	pageParam := c.DefaultQuery("page", "1")
-	orderByParam := c.DefaultQuery("orderBy", "id")
-	orderParam := c.DefaultQuery("order", "DESC")
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "id", "ASC")
 	var err error
 	var perPage, page, skip, total int
 	var cArr []models.Customer
@@ -221,7 +217,7 @@ func CustomerIndex(c *gin.Context) {
 }
 
 func LcIndex(c *gin.Context) {
-	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c)
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "created_at", "DESC")
 	var err error
 	var perPage, page, skip, total int
 	var lcArr []models.Lc
@@ -276,11 +272,11 @@ func LcIndex(c *gin.Context) {
 }
 
 func TyreIndex(c *gin.Context) {
-	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c)
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "tyre_id", "ASC")
 	var err error
 	var perPage, page, skip, total int
 	var tArr []models.Tyre
-	var container models.Tyre
+	var tyre models.Tyre
 
 	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
 	filters := utilities.GetFilters(c, params)
@@ -293,11 +289,11 @@ func TyreIndex(c *gin.Context) {
 	}
 
 	if err == nil {
-		tArr, err = container.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+		tArr, err = tyre.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
 	}
 
 	if err == nil {
-		total, err = container.Count(filters.ToSql())
+		total, err = tyre.Count(filters.ToSql())
 	}
 
 	totalPages := int(math.Ceil(float64(total) / float64(perPage)))

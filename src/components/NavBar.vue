@@ -67,7 +67,7 @@ export default {
                 { label: "Stock", link: "/stock", icon: "widgets", },
                 { label: "Customers", link: "/customers", icon: "badge", },
                 { label: "Orders", link: "/orders", icon: "receipt_long", },
-                { label: "Products", link: "/products", icon: "screen_record", },
+                { label: "Tyres", link: "/tyres", icon: "screen_record", },
                 { label: "Payments", link: "/payments", icon: "payments", },
             ],
         }
