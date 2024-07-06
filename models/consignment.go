@@ -19,7 +19,7 @@ type Consignment struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (c Consignment) Get(where, order, orderBy string, offset, limit int) ([]Consignment, error) {
+func (consignment Consignment) Get(where, order, orderBy string, offset, limit int) ([]Consignment, error) {
 	var (
 		consignments []Consignment
 		query        string
@@ -51,6 +51,6 @@ func (c Consignment) Get(where, order, orderBy string, offset, limit int) ([]Con
 	}
 }
 
-func (c Consignment) Count(where string) (int, error) {
+func (consignment Consignment) Count(where string) (int, error) {
 	return db.Count(where, "consignments")
 }

@@ -12,15 +12,18 @@
                     </div>
                 </th>
                 <th 
-                    v-for="{key, label} in columns"
-                    class="py-2 text-sm sticky top-12 bg-white"
+                    v-for="{key, label, formatter} in columns"
+                    :class="[
+                        'py-2 text-sm sticky top-12 bg-white',
+                        formatter == 'multiline' ? 'max-w-48' : ''
+                    ]"
                     :key="key"
                 >
-                    <div>
+                    <div :class="formatter == 'multiline' ? 'max-w-44 b block mx-auto' : ''">
                         {{ label }}
                         <span v-if="key == orderBy && 'ASC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'DESC'}) }"
-                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer"
+                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer block mx-auto"
                         >
                             keyboard_arrow_up
                         </span>
@@ -55,7 +58,8 @@
                     :key="item[uniqueField] + '-' + key"
                     class="text-sm text-center px-2 py-3"
                 >
-                    <div v-if="formatter">{{ formatters[formatter](item[key]) }}</div>
+                    <div class="h-full max-w-48 block mx-auto" v-if="formatter == 'multiline'" v-html="formatters[formatter](item[key] ?? '')"></div>
+                    <div v-else-if="formatter">{{ formatters[formatter](item[key]) }}</div>
                     <div v-else>{{ item[key] }}</div>
                 </td>
             </tr>
@@ -123,7 +127,7 @@
 
 <script>
 import AnchorLink from '@/components/AnchorLink.vue';
-import { currencyFormatter, dateFormatter, dateTimeFormatter } from '@/composables/formatter';
+import { currencyFormatter, dateFormatter, dateTimeFormatter, multilineFormatter } from '@/composables/formatter';
 export default {
 
     components: {
@@ -152,6 +156,7 @@ export default {
                 currency: currencyFormatter,
                 date: dateFormatter,
                 dateTime: dateTimeFormatter,
+                multiline: multilineFormatter
             }
         }
     },

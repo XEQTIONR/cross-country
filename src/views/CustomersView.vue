@@ -10,9 +10,9 @@
       <NavBar />
       <div class="w-full px-2">
         <div class="w-full flex justify-between items-center sticky top-0 bg-white">
-          <h1 class="text-xl ml-0.5">Containers</h1>
+          <h1 class="text-xl ml-0.5">Customers</h1>
           <button 
-            class="hover:bg-gray-100 bg-gray-200 hover:text-purple-400 text-gray-500 border hover:border-purple-400 border-gray-200 pt-1 px-1 my-2 rounded text-sm"
+            class="hover:bg-gray-100 bg-gray-200 hover:text-purple-400 text-gray-500 border hover:border-purple-400 border-gray-200 pt-1 px-1 my-2 rounded text-sm shadow-lg"
             @click="toggleSidePanel"
           >
             <span class="material-symbols-rounded">
@@ -21,16 +21,16 @@
           </button>
         </div>
         <TableView
-          v-if="pageData?.containers"
+          v-if="pageData?.customers"
           :columns="columns"
-          :items="pageData?.containers.items"
-          :links="pageData?.containers.links"
-          :page="pageData?.containers.page"
-          :perPage="pageData?.containers.per_page"
-          :total="pageData?.containers.total"
-          uniqueField="created_at"
-          :orderBy="pageData?.containers.order_by"
-          :order="pageData?.containers.order"
+          :items="pageData?.customers.items"
+          :links="pageData?.customers.links"
+          :page="pageData?.customers.page"
+          :perPage="pageData?.customers.per_page"
+          :total="pageData?.customers.total"
+          uniqueField="id"
+          :orderBy="pageData?.customers.order_by"
+          :order="pageData?.customers.order"
           @changePageSize="changePageSize"
           @changeOrder="reorder"
         />
@@ -44,7 +44,8 @@ import SidePanel from '@/components/SidePanel.vue'
 import FiltersForm from '@/components/FiltersForm.vue'
 import NavBar from '@/components/NavBar.vue'
 
-import { ops } from '@/composables/operations.js'
+import { ops } from '@/composables/operations'
+import { changePageSize, reorder, filter } from '@/composables/qvars'
 
 export default {
   
@@ -69,11 +70,12 @@ export default {
       pageData: null,
       selected: [],
       columns: [
-        {key: "container_num", label: "Container #", formatter: null},
-        {key: "bol", label: "BOL", formatter: null},
-        
+        {key: "id", label: "ID", formatter: null},
+        {key: "name", label: "Name", formatter: null},
+        {key: "address", label: "Address", formatter: "multiline"},
+        {key: "phone", label: "Phone", formatter: null},
+        {key: "notes", label: "Notes", formatter: "multiline"},
         {key: "created_at", label: "Created At", formatter: "dateTime"},
-        {key: "updated_at", label: "Updated At", formatter: "dateTime"},
       ],
       sidePanelOpen: false,
     }
@@ -97,6 +99,10 @@ export default {
             case "currency":
               val = parseFloat(value)
               break
+            
+            case "multiline":
+                val = value.replaceAll("\n", "<br>")
+                break
             default:
               val = value.substring(1, value.length - 1)
           }
@@ -123,78 +129,11 @@ export default {
       this.sidePanelOpen = false
     },
 
-    filter(qStr) {
-      const { pathname, href } = window.location
+    filter,
 
-      let params = (new URL(href)).searchParams
-      let url = "?"
-      
-      for (const [key, value] of params) { // get non filter params
-        console.log(key, value)
-        if ( key.indexOf(".") == -1 ) {
-          if (url != "") {
-            url+= "&"
-          }
-          url += `${key}=${value}`
-        }
-      }
-      this.closeSidePanel()
+    changePageSize,
 
-      url = pathname + url 
-
-      if (qStr !== "") {
-        url += `&${qStr}`
-      }
-
-      this.$router.push(url)
-    },
-
-    changePageSize({target}) {
-      let { search, pathname } = window.location
-
-      if (search == "") {
-        this.$router.push(pathname + "?perPage=" + target.value)
-      } else {
-        const regex = /perPage=\d+/
-        const pageRegex = /page=\d+/
-
-        let path = (pathname + search).replace(regex, "perPage=" + target.value)
-
-        if (path.includes('page=')) {
-          path = path.replace(pageRegex, 'page=1')
-        } else {
-          path = path + '&page=1'
-        }
-
-        this.$router.push(path)
-      }
-    },
-
-    reorder({orderBy, order}) {
-      let { search, pathname } = window.location
-
-      if (search == "") {
-        this.$router.push(`${pathname}?orderBy=${orderBy}&order=${order}`)  
-      } else {
-        const orderByRegex = /orderBy=\w+/
-        const orderRegex = /order=\w+/
-
-        let path = (pathname + search)
-
-        if (path.includes('orderBy=')) {
-          path = path.replace(orderByRegex, "orderBy=" + orderBy)
-        } else {
-          path += '&orderBy=' + orderBy
-        }
-        if (path.includes('order=')) {
-          path = path.replace(orderRegex, 'order=' + order)
-        } else {
-          path += '&order=' + order
-        }
-
-        this.$router.push(path)
-      }
-    }
+    reorder,
   }
 }
 

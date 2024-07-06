@@ -1,4 +1,3 @@
-// import { createRouter, createWebHistory } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
@@ -7,6 +6,7 @@ import RegisterView from '@/views/RegisterView.vue'
 import LcsView from '@/views/LcsView.vue'
 import ConsignmentsView from '@/views/ConsignmentsView.vue'
 import ContainersView from '@/views/ContainersView.vue'
+import CustomersView from '@/views/CustomersView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +66,11 @@ const router = createRouter({
       path: '/containers',
       name: 'containers.index',
       component: ContainersView
+    },
+    {
+      path: '/customers',
+      name: 'customers.index',
+      component: CustomersView
     },
   ]
 })

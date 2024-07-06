@@ -300,9 +300,163 @@ func consignmentIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
+	if err == nil {
+		respond(c, map[string]any{
+			"err":          nil,
+			"consignments": results,
+		})
+
+		return
+	}
+
 	respond(c, map[string]any{
-		"err":          err,
+		"err":          fmt.Sprintf("%v", err),
 		"consignments": results,
+	})
+}
+
+func containerIndex(c *gin.Context) {
+	params := c.Request.URL.Query()
+	perPageParam := c.DefaultQuery("perPage", "10")
+	pageParam := c.DefaultQuery("page", "1")
+	orderByParam := c.DefaultQuery("orderBy", "created_at")
+	orderParam := c.DefaultQuery("order", "DESC")
+	var err error
+	var perPage, page, skip, total int
+	var cArr []models.Container
+	var container models.Container
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		cArr, err = container.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	if err == nil {
+		total, err = container.Count(filters.ToSql())
+	}
+
+	links := []utilities.PaginationLink{}
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+
+	for i := 1; i <= totalPages; i++ {
+		link := url + strconv.Itoa(i)
+		for k, v := range filters {
+			link = link + "&" + k + "=" + v
+		}
+		links = append(links, utilities.PaginationLink{
+			Label:         strconv.Itoa(i),
+			Link:          link,
+			IsCurrentPage: i == page,
+		})
+	}
+
+	results := utilities.PaginatedResults[models.Container]{
+		Items:      cArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	if err == nil {
+		respond(c, map[string]any{
+			"err":        nil,
+			"containers": results,
+		})
+
+		return
+	}
+
+	respond(c, map[string]any{
+		"err":        fmt.Sprintf("%v", err),
+		"containers": results,
+	})
+}
+
+func customerIndex(c *gin.Context) {
+	params := c.Request.URL.Query()
+	perPageParam := c.DefaultQuery("perPage", "10")
+	pageParam := c.DefaultQuery("page", "1")
+	orderByParam := c.DefaultQuery("orderBy", "id")
+	orderParam := c.DefaultQuery("order", "DESC")
+	var err error
+	var perPage, page, skip, total int
+	var cArr []models.Customer
+	var customer models.Customer
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		cArr, err = customer.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	fmt.Println(err)
+	if err == nil {
+		total, err = customer.Count(filters.ToSql())
+	} else {
+		fmt.Println("err not nil")
+	}
+
+	links := []utilities.PaginationLink{}
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+
+	for i := 1; i <= totalPages; i++ {
+		link := url + strconv.Itoa(i)
+		for k, v := range filters {
+			link = link + "&" + k + "=" + v
+		}
+		links = append(links, utilities.PaginationLink{
+			Label:         strconv.Itoa(i),
+			Link:          link,
+			IsCurrentPage: i == page,
+		})
+	}
+
+	results := utilities.PaginatedResults[models.Customer]{
+		Items:      cArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	if err == nil {
+		respond(c, map[string]any{
+			"err":       nil,
+			"customers": results,
+		})
+
+		return
+	}
+
+	respond(c, map[string]any{
+		"err":       fmt.Sprintf("%v", err),
+		"customers": results,
 	})
 }
 
@@ -362,8 +516,17 @@ func lcIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
+	if err == nil {
+		respond(c, map[string]any{
+			"err": nil,
+			"lcs": results,
+		})
+
+		return
+	}
+
 	respond(c, map[string]any{
-		"err": err,
+		"err": fmt.Sprintf("%v", err),
 		"lcs": results,
 	})
 }
@@ -389,6 +552,10 @@ func main() {
 		r.GET("/lcs", lcIndex)
 
 		r.GET("/consignments", consignmentIndex)
+
+		r.GET("/containers", containerIndex)
+
+		r.GET("/customers", customerIndex)
 
 		r.GET("/", func(c *gin.Context) {
 			session := sessions.Default(c)

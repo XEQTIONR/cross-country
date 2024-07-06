@@ -24,3 +24,7 @@ export function dateTimeFormatter(dateTime) {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     })).format(new Date(dateTime));
 }
+
+export function multilineFormatter(text) {
+    return text.replaceAll("\n", "<br>")
+}
