@@ -531,6 +531,77 @@ func lcIndex(c *gin.Context) {
 	})
 }
 
+func tyreIndex(c *gin.Context) {
+	params := c.Request.URL.Query()
+	perPageParam := c.DefaultQuery("perPage", "10")
+	pageParam := c.DefaultQuery("page", "1")
+	orderByParam := c.DefaultQuery("orderBy", "tyre_id")
+	orderParam := c.DefaultQuery("order", "DESC")
+	var err error
+	var perPage, page, skip, total int
+	var tArr []models.Tyre
+	var container models.Tyre
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		tArr, err = container.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	if err == nil {
+		total, err = container.Count(filters.ToSql())
+	}
+
+	links := []utilities.PaginationLink{}
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+
+	for i := 1; i <= totalPages; i++ {
+		link := url + strconv.Itoa(i)
+		for k, v := range filters {
+			link = link + "&" + k + "=" + v
+		}
+		links = append(links, utilities.PaginationLink{
+			Label:         strconv.Itoa(i),
+			Link:          link,
+			IsCurrentPage: i == page,
+		})
+	}
+
+	results := utilities.PaginatedResults[models.Tyre]{
+		Items:      tArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	if err == nil {
+		respond(c, map[string]any{
+			"err":   nil,
+			"tyres": results,
+		})
+
+		return
+	}
+
+	respond(c, map[string]any{
+		"err":   fmt.Sprintf("%v", err),
+		"tyres": results,
+	})
+}
+
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -556,6 +627,8 @@ func main() {
 		r.GET("/containers", containerIndex)
 
 		r.GET("/customers", customerIndex)
+
+		r.GET("/tyres", tyreIndex)
 
 		r.GET("/", func(c *gin.Context) {
 			session := sessions.Default(c)
