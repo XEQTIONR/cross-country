@@ -271,6 +271,61 @@ func LcIndex(c *gin.Context) {
 	})
 }
 
+func PaymentIndex(c *gin.Context) {
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "transaction_id", "DESC")
+	var err error
+	var perPage, page, skip, total int
+	var pArr []models.Payment
+	var payment models.Payment
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		pArr, err = payment.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	if err == nil {
+		total, err = payment.Count(filters.ToSql())
+	}
+
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+	links := getPaginationLinks(totalPages, page, url, filters)
+
+	results := utilities.PaginatedResults[models.Payment]{
+		Items:      pArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	if err == nil {
+		respond(c, map[string]any{
+			"err":      nil,
+			"payments": results,
+		})
+
+		return
+	}
+
+	respond(c, map[string]any{
+		"err":      fmt.Sprintf("%v", err),
+		"payments": results,
+	})
+}
+
 func TyreIndex(c *gin.Context) {
 	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "tyre_id", "ASC")
 	var err error
