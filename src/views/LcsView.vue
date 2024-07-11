@@ -21,16 +21,16 @@
           </button>
         </div>
         <TableView
-          v-if="pageData?.lcs"
+          v-if="pageData?.data"
           :columns="columns"
-          :items="pageData?.lcs.items"
-          :links="pageData?.lcs.links"
-          :page="pageData?.lcs.page"
-          :perPage="pageData?.lcs.per_page"
-          :total="pageData?.lcs.total"
+          :items="pageData?.data.items"
+          :links="pageData?.data.links"
+          :page="pageData?.data.page"
+          :perPage="pageData?.data.per_page"
+          :total="pageData?.data.total"
           uniqueField="lc_num"
-          :orderBy="pageData?.lcs.order_by"
-          :order="pageData?.lcs.order"
+          :orderBy="pageData?.data.order_by"
+          :order="pageData?.data.order"
           @changePageSize="changePageSize"
           @changeOrder="reorder"
         />

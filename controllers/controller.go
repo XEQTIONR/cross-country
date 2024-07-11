@@ -90,16 +90,16 @@ func ConsignmentIndex(c *gin.Context) {
 
 	if err == nil {
 		respond(c, map[string]any{
-			"err":          nil,
-			"consignments": results,
+			"err":  nil,
+			"data": results,
 		})
 
 		return
 	}
 
 	respond(c, map[string]any{
-		"err":          fmt.Sprintf("%v", err),
-		"consignments": results,
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
 	})
 }
 
@@ -145,16 +145,16 @@ func ContainerIndex(c *gin.Context) {
 
 	if err == nil {
 		respond(c, map[string]any{
-			"err":        nil,
-			"containers": results,
+			"err":  nil,
+			"data": results,
 		})
 
 		return
 	}
 
 	respond(c, map[string]any{
-		"err":        fmt.Sprintf("%v", err),
-		"containers": results,
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
 	})
 }
 
@@ -203,16 +203,16 @@ func CustomerIndex(c *gin.Context) {
 
 	if err == nil {
 		respond(c, map[string]any{
-			"err":       nil,
-			"customers": results,
+			"err":  nil,
+			"data": results,
 		})
 
 		return
 	}
 
 	respond(c, map[string]any{
-		"err":       fmt.Sprintf("%v", err),
-		"customers": results,
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
 	})
 }
 
@@ -258,16 +258,16 @@ func LcIndex(c *gin.Context) {
 
 	if err == nil {
 		respond(c, map[string]any{
-			"err": nil,
-			"lcs": results,
+			"err":  nil,
+			"data": results,
 		})
 
 		return
 	}
 
 	respond(c, map[string]any{
-		"err": fmt.Sprintf("%v", err),
-		"lcs": results,
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
 	})
 }
 
@@ -313,16 +313,16 @@ func OrderIndex(c *gin.Context) {
 
 	if err == nil {
 		respond(c, map[string]any{
-			"err":    nil,
-			"orders": results,
+			"err":  nil,
+			"data": results,
 		})
 
 		return
 	}
 
 	respond(c, map[string]any{
-		"err":    fmt.Sprintf("%v", err),
-		"orders": results,
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
 	})
 }
 
@@ -368,16 +368,16 @@ func PaymentIndex(c *gin.Context) {
 
 	if err == nil {
 		respond(c, map[string]any{
-			"err":      nil,
-			"payments": results,
+			"err":  nil,
+			"data": results,
 		})
 
 		return
 	}
 
 	respond(c, map[string]any{
-		"err":      fmt.Sprintf("%v", err),
-		"payments": results,
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
 	})
 }
 
@@ -423,15 +423,15 @@ func TyreIndex(c *gin.Context) {
 
 	if err == nil {
 		respond(c, map[string]any{
-			"err":   nil,
-			"tyres": results,
+			"err":  nil,
+			"data": results,
 		})
 
 		return
 	}
 
 	respond(c, map[string]any{
-		"err":   fmt.Sprintf("%v", err),
-		"tyres": results,
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
 	})
 }

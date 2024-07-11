@@ -28,16 +28,16 @@
           </div>
         </div>
         <TableView
-          v-if="pageData?.consignments"
+          v-if="pageData?.data"
           :columns="columns"
-          :items="pageData?.consignments.items"
-          :links="pageData?.consignments.links"
-          :page="pageData?.consignments.page"
-          :perPage="pageData?.consignments.per_page"
-          :total="pageData?.consignments.total"
+          :items="pageData?.data.items"
+          :links="pageData?.data.links"
+          :page="pageData?.data.page"
+          :perPage="pageData?.data.per_page"
+          :total="pageData?.data.total"
           uniqueField="lc_num"
-          :orderBy="pageData?.consignments.order_by"
-          :order="pageData?.consignments.order"
+          :orderBy="pageData?.data.order_by"
+          :order="pageData?.data.order"
           @changePageSize="changePageSize"
           @changeOrder="reorder"
         />

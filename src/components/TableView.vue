@@ -23,17 +23,17 @@
                         {{ label }}
                         <span v-if="key == orderBy && 'ASC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'DESC'}) }"
-                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer"
+                            class="material-symbols-rounded align-middle hover:text-red-300 text-gray-600 cursor-pointer"
                         >
                             keyboard_arrow_up
                         </span>
                         <span v-if="key == orderBy && 'DESC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
-                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer"
+                            class="material-symbols-rounded align-middle hover:text-red-300 text-gray-600 cursor-pointer"
                         >
                             keyboard_arrow_down
                         </span>
-                        <span v-if="key != orderBy" class="material-symbols-rounded align-middle text-gray-300 cursor-pointer"
+                        <span v-if="key != orderBy" class="material-symbols-rounded align-middle hover:text-red-300 text-gray-300 cursor-pointer"
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'ASC'}) }"
                         >
                             swap_vert
@@ -85,8 +85,8 @@
                     :to="previousLink?.link ?? '/404'"
                     :disabled="previousLink == null"
                     :class="{
-                      'text-center rounded pt-1 min-w-8 h-8 px-1' : true,
-                      'bg-gray-100 hover:border-purple-600 hover:text-purple-600': previousLink != null,  
+                      'text-center rounded pt-1 min-w-8 h-8 px-1 border' : true,
+                      'bg-gray-100 hover:border-red-400 hover:text-red-400': previousLink != null,  
                       'bg-gray-200': previousLink == null  
                     }"
                   >
@@ -99,9 +99,10 @@
                     :to="link.link"
                     :disabled="link.is_current_page || link.link == null"
                     :class="{
-                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2' : true,
-                      'bg-purple-600 text-white font-bold' : link.is_current_page,
-                      'bg-gray-100 hover:border-purple-600 hover:text-purple-600' : !link.is_current_page,
+                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2 border' : true,
+                      'bg-red-400 text-white font-bold' : link.is_current_page,
+                      'bg-gray-100 hover:border-red-400 hover:text-red-400' : !link.is_current_page && link.link,
+                      'bg-gray-200': link.link == null
                     }"
                   >
                     {{ link.link ? link.label : '...' }}
@@ -110,8 +111,8 @@
                     :to="nextLink?.link ?? '/404'"
                     :disabled="nextLink == null"
                     :class="{
-                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2' : true,
-                      'bg-gray-100 hover:border-purple-600 hover:text-purple-600': nextLink != null,
+                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2 border' : true,
+                      'bg-gray-100 hover:border-red-400 hover:text-red-400': nextLink != null,
                       'bg-gray-200': nextLink == null
                     }"
                   >
