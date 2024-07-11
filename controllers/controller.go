@@ -271,6 +271,61 @@ func LcIndex(c *gin.Context) {
 	})
 }
 
+func OrderIndex(c *gin.Context) {
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "balance", "DESC")
+	var err error
+	var perPage, page, skip, total int
+	var oArr []models.Order
+	var order models.Order
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		oArr, err = order.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	if err == nil {
+		total, err = order.Count(filters.ToSql())
+	}
+
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+	links := getPaginationLinks(totalPages, page, url, filters)
+
+	results := utilities.PaginatedResults[models.Order]{
+		Items:      oArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	if err == nil {
+		respond(c, map[string]any{
+			"err":    nil,
+			"orders": results,
+		})
+
+		return
+	}
+
+	respond(c, map[string]any{
+		"err":    fmt.Sprintf("%v", err),
+		"orders": results,
+	})
+}
+
 func PaymentIndex(c *gin.Context) {
 	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "transaction_id", "DESC")
 	var err error

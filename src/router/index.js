@@ -8,6 +8,7 @@ import ConsignmentsView from '@/views/ConsignmentsView.vue'
 import ContainersView from '@/views/ContainersView.vue'
 import CustomersView from '@/views/CustomersView.vue'
 import TyresView from '@/views/TyresView.vue'
+import OrdersView from '@/views/OrdersView.vue'
 import PaymentsView from '@/views/PaymentsView.vue'
 
 const router = createRouter({
@@ -78,6 +79,11 @@ const router = createRouter({
       path: '/tyres',
       name: 'tyres.index',
       component: TyresView
+    },
+    {
+      path: '/orders',
+      name: 'orders.index',
+      component: OrdersView
     },
     {
       path: '/payments',

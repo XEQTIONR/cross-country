@@ -267,6 +267,8 @@ func main() {
 
 		r.GET("/customers", controllers.CustomerIndex)
 
+		r.GET("/orders", controllers.OrderIndex)
+
 		r.GET("/payments", controllers.PaymentIndex)
 
 		r.GET("/tyres", controllers.TyreIndex)
