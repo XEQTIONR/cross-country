@@ -23,7 +23,7 @@
                         {{ label }}
                         <span v-if="key == orderBy && 'ASC' == order" 
                             @click="() => { $emit('changeOrder', {orderBy: key, order: 'DESC'}) }"
-                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer block mx-auto"
+                            class="material-symbols-rounded align-middle text-gray-500 cursor-pointer"
                         >
                             keyboard_arrow_up
                         </span>
@@ -85,7 +85,7 @@
                     :to="previousLink?.link ?? '/404'"
                     :disabled="previousLink == null"
                     :class="{
-                      'text-center rounded pt-1 min-w-8 h-8 px-1 border' : true,
+                      'text-center rounded pt-1 min-w-8 h-8 px-1' : true,
                       'bg-gray-100 hover:border-purple-600 hover:text-purple-600': previousLink != null,  
                       'bg-gray-200': previousLink == null  
                     }"
@@ -94,23 +94,23 @@
 
                   </AnchorLink>
                   <AnchorLink
-                    v-for="link in links"
+                    v-for="(link) in pageLinkList"
                     :key="link.label"
                     :to="link.link"
-                    :disabled="link.is_current_page"
+                    :disabled="link.is_current_page || link.link == null"
                     :class="{
-                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2 border' : true,
+                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2' : true,
                       'bg-purple-600 text-white font-bold' : link.is_current_page,
                       'bg-gray-100 hover:border-purple-600 hover:text-purple-600' : !link.is_current_page,
                     }"
                   >
-                    {{ link.label }}
+                    {{ link.link ? link.label : '...' }}
                   </AnchorLink>
                   <AnchorLink 
                     :to="nextLink?.link ?? '/404'"
                     :disabled="nextLink == null"
                     :class="{
-                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2 border' : true,
+                      'text-center rounded pt-1 min-w-8 h-8 px-1 ml-2' : true,
                       'bg-gray-100 hover:border-purple-600 hover:text-purple-600': nextLink != null,
                       'bg-gray-200': nextLink == null
                     }"
@@ -195,6 +195,37 @@ export default {
             }
 
             return null
+        },
+
+        pageLinkList() {
+            if (this.links.length <= 7) {
+                return this.links
+            }
+
+            const blank = {
+                link: null,
+                is_current_page:false,
+            }
+
+            const currentIndex = this.links.findIndex(({is_current_page}) => is_current_page)
+            let list = []
+
+            if (currentIndex < 4) {
+                list = this.links.slice(0, 5)
+                list.push({...blank, label: "Blank1"}, this.links[this.links.length - 1])
+            } else if ((this.links.length - currentIndex) < 5) {
+                list = this.links.slice(-5)
+                list.splice(0, 0, this.links[0], {...blank, label: "Blank2"},)
+            } else {
+                list = [
+                    this.links[0],
+                    {...blank, label: "Blank3"},
+                    ...(this.links.slice(currentIndex-1, currentIndex+2)),
+                    {...blank, label: "Blank4"},
+                    this.links[this.links.length - 1]
+                ]
+            }
+            return list
         },
 
         startIndex () {
