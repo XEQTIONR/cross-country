@@ -271,6 +271,8 @@ func main() {
 
 		r.GET("/payments", controllers.PaymentIndex)
 
+		r.GET("/stock", controllers.StockIndex)
+
 		r.GET("/tyres", controllers.TyreIndex)
 
 		r.GET("/", func(c *gin.Context) {
