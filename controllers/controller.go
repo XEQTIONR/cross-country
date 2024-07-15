@@ -48,6 +48,61 @@ func getPaginationLinks(totalPages, page int, url string, filters utilities.Filt
 	return links
 }
 
+func BankAccountIndex(c *gin.Context) {
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "id", "ASC")
+	var err error
+	var perPage, page, skip, total int
+	var aArr []models.BankAccount
+	var account models.BankAccount
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		aArr, err = account.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	if err == nil {
+		total, err = account.Count(filters.ToSql())
+	}
+
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+	links := getPaginationLinks(totalPages, page, url, filters)
+
+	results := utilities.PaginatedResults[models.BankAccount]{
+		Items:      aArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	if err == nil {
+		respond(c, map[string]any{
+			"err":  nil,
+			"data": results,
+		})
+
+		return
+	}
+
+	respond(c, map[string]any{
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
+	})
+}
+
 func ConsignmentIndex(c *gin.Context) {
 	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "created_at", "DESC")
 	var err error

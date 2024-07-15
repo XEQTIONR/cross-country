@@ -11,6 +11,7 @@ import TyresView from '@/views/TyresView.vue'
 import OrdersView from '@/views/OrdersView.vue'
 import PaymentsView from '@/views/PaymentsView.vue'
 import StockView from '@/views/StockView.vue'
+import BankAccountsView from '@/views/BankAccountsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,11 @@ const router = createRouter({
       path: '/private/new',
       name: 'new',
       component: () => import('../views/NewView.vue')
+    },
+    {
+      path: '/bank_accounts',
+      name: 'bank_accounts.index',
+      component: BankAccountsView
     },
     {
       path: '/lcs',

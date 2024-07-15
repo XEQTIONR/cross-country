@@ -259,6 +259,8 @@ func main() {
 
 		gob.Register(&map[string]string{}) // why do we need this?
 
+		r.GET("/bank_accounts", controllers.BankAccountIndex)
+
 		r.GET("/lcs", controllers.LcIndex)
 
 		r.GET("/consignments", controllers.ConsignmentIndex)

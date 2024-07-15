@@ -10,7 +10,7 @@
       <NavBar />
       <div class="w-full px-2">
         <div class="w-full flex justify-between items-center sticky top-0 bg-white">
-          <h1 class="text-xl ml-0.5">Payments</h1>
+          <h1 class="text-xl ml-0.5">Bank Accounts</h1>
           <button 
             class="hover:bg-gray-100 bg-gray-200 hover:text-purple-400 text-gray-500 border hover:border-purple-400 border-gray-200 pt-1 px-1 my-2 rounded text-sm shadow-lg"
             @click="toggleSidePanel"
@@ -28,7 +28,7 @@
           :page="pageData?.data.page"
           :perPage="pageData?.data.per_page"
           :total="pageData?.data.total"
-          uniqueField="transaction_id"
+          uniqueField="id"
           :orderBy="pageData?.data.order_by"
           :order="pageData?.data.order"
           @changePageSize="changePageSize"
@@ -70,11 +70,11 @@ export default {
       pageData: null,
       selected: [],
       columns: [
-        {key: "transaction_id", label: "Trans ID", formatter: null},
-        {key: "order_num", label: "OrderNum", formatter: null},
-        {key: "payment_amount", label: "Payment Amount", formatter: "currency"},
-        {key: "refund_amount", label: "Refund Amount", formatter: "currency"},
-        {key: "type", label: "Type", formatter: null},
+        {key: "id", label: "ID", formatter: null},
+        {key: "bank_name", label: "Bank Name", formatter: null},
+        {key: "account_name", label: "Account Name", formatter: null},
+        {key: "account_number", label: "Account #", formatter: null},
+        {key: "bank_address", label: "Bank Address", formatter: null},
         {key: "created_at", label: "Created At", formatter: "dateTime"},
       ],
       sidePanelOpen: false,

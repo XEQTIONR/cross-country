@@ -61,14 +61,15 @@ export default {
         return {
             open: d != undefined,
             links: [
-                { label: "LCs", link: "/lcs", icon: "account_balance", },
+                { label: "Bank Accounts", link: "/bank_accounts", icon: "account_balance", },
+                { label: "LCs", link: "/lcs", icon: "request_page", },
                 { label: "Consignments", link: "/consignments", icon: "anchor", },
                 { label: "Containers", link: "/containers", icon: "package_2", },
-                { label: "Stock", link: "/stock", icon: "widgets", },
-                { label: "Customers", link: "/customers", icon: "badge", },
                 { label: "Orders", link: "/orders", icon: "receipt_long", },
-                { label: "Tyres", link: "/tyres", icon: "screen_record", },
                 { label: "Payments", link: "/payments", icon: "payments", },
+                { label: "Customers", link: "/customers", icon: "badge", },
+                { label: "Stock", link: "/stock", icon: "widgets", },
+                { label: "Tyres", link: "/tyres", icon: "support", },
             ],
         }
     },
