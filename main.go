@@ -109,7 +109,7 @@ func login(c *gin.Context) {
 	if user.Id > 0 {
 		if user.CheckPasswordHash(password) {
 			session.Delete("to")
-			session.Set(userkey, user.Username) // In real world usage you'd set this to the users ID
+			session.Set(userkey, user.Email) // In real world usage you'd set this to the users ID
 			if err := session.Save(); err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"errors": "Failed to save session in login"})
 				return
@@ -177,7 +177,6 @@ func logout(c *gin.Context) {
 
 func register(c *gin.Context) {
 	type userInfo struct {
-		Username        string `json:"username"`
 		Password        string `binding:"required"`
 		ConfirmPassword string `binding:"required"`
 		Email           string `json:"email"`
@@ -185,7 +184,6 @@ func register(c *gin.Context) {
 
 	var (
 		credentials     userInfo
-		username        string
 		password        string
 		confirmPassword string
 		email           string
@@ -194,19 +192,18 @@ func register(c *gin.Context) {
 
 	if strings.Contains(acceptHeader, "application/json") {
 		c.BindJSON(&credentials)
-		username = credentials.Username
+		email = credentials.Email
 		password = credentials.Password
 		confirmPassword = credentials.ConfirmPassword
 		email = credentials.Email
 	} else {
-		username = c.PostForm("username")
 		password = c.PostForm("password")
 		confirmPassword = c.PostForm("confirmPassword")
 		email = c.PostForm("email")
 	}
 
 	if password == confirmPassword {
-		user := users.User{Username: username, Email: email}
+		user := users.User{Email: email}
 		if err := user.SetPassword(password); err != nil {
 			fmt.Printf("Error setting password: %v\n", err)
 		}
@@ -276,6 +273,8 @@ func main() {
 		r.GET("/stock", controllers.StockIndex)
 
 		r.GET("/tyres", controllers.TyreIndex)
+
+		r.GET("/users", controllers.UserIndex)
 
 		r.GET("/", func(c *gin.Context) {
 			session := sessions.Default(c)

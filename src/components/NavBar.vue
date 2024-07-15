@@ -67,9 +67,10 @@ export default {
                 { label: "Containers", link: "/containers", icon: "package_2", },
                 { label: "Orders", link: "/orders", icon: "receipt_long", },
                 { label: "Payments", link: "/payments", icon: "payments", },
-                { label: "Customers", link: "/customers", icon: "badge", },
+                { label: "Customers", link: "/customers", icon: "storefront", },
                 { label: "Stock", link: "/stock", icon: "widgets", },
                 { label: "Tyres", link: "/tyres", icon: "support", },
+                { label: "Users", link: "/users", icon: "badge", },
             ],
         }
     },

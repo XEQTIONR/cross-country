@@ -12,6 +12,7 @@ import OrdersView from '@/views/OrdersView.vue'
 import PaymentsView from '@/views/PaymentsView.vue'
 import StockView from '@/views/StockView.vue'
 import BankAccountsView from '@/views/BankAccountsView.vue'
+import UsersView from '@/views/UsersView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -91,6 +92,11 @@ const router = createRouter({
       path: '/tyres',
       name: 'tyres.index',
       component: TyresView
+    },
+    {
+      path: '/users',
+      name: 'users.index',
+      component: UsersView
     },
     {
       path: '/orders',

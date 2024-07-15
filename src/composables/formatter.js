@@ -7,13 +7,13 @@ export function decimalFormatter(number, decimalPlaces = 2) {
 }
 
 export function dateFormatter(date, format="DD/MM/YYYY") {
-
     const formats = {
         "YYYY-MM-DD" : "en-CA",
         "M/D/YYYY" : "en-US",
         "DD/MM/YYYY" : "en-GB",
         "D/M/YYYY" : "en-IN"
     }
+
     return (new Intl.DateTimeFormat(formats[format], {timeZone: "UTC"})).format(new Date(date));
 }
 
@@ -27,4 +27,13 @@ export function dateTimeFormatter(dateTime) {
 
 export function multilineFormatter(text) {
     return text.replaceAll("\n", "<br>")
+}
+
+export function booleanFormatter(value) {
+    const className = value ? 'text-green-500' : 'text-red-500'
+    const symbol = value ? 'check' : 'close'
+
+    return `<span class="material-symbols-rounded ${className}">
+        ${symbol}
+    </span>`
 }

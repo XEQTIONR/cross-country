@@ -59,7 +59,7 @@
                     class="text-sm text-center px-2 py-3"
                 >
                     <div class="h-full max-w-48 block mx-auto" v-if="formatter == 'multiline'" v-html="formatters[formatter](item[key] ?? '')"></div>
-                    <div v-else-if="formatter">{{ formatters[formatter](item[key]) }}</div>
+                    <div v-else-if="formatter" v-html="formatters[formatter](item[key])" />
                     <div v-else>{{ item[key] }}</div>
                 </td>
             </tr>
@@ -128,7 +128,7 @@
 
 <script>
 import AnchorLink from '@/components/AnchorLink.vue';
-import { currencyFormatter, dateFormatter, dateTimeFormatter, multilineFormatter } from '@/composables/formatter';
+import { booleanFormatter, currencyFormatter, dateFormatter, dateTimeFormatter, multilineFormatter } from '@/composables/formatter';
 export default {
 
     components: {
@@ -157,7 +157,8 @@ export default {
                 currency: currencyFormatter,
                 date: dateFormatter,
                 dateTime: dateTimeFormatter,
-                multiline: multilineFormatter
+                multiline: multilineFormatter,
+                boolean: booleanFormatter
             }
         }
     },

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"cross-country/models"
+	"cross-country/users"
 	"cross-country/utilities"
 	"fmt"
 	"math"
@@ -521,6 +522,61 @@ func StockIndex(c *gin.Context) {
 
 	results := utilities.PaginatedResults[models.Stock]{
 		Items:      sArr,
+		Filters:    filters,
+		PerPage:    perPage,
+		TotalPages: totalPages,
+		Page:       page,
+		Total:      total,
+		Links:      links,
+		OrderBy:    orderByParam,
+		Order:      orderParam,
+	}
+
+	if err == nil {
+		respond(c, map[string]any{
+			"err":  nil,
+			"data": results,
+		})
+
+		return
+	}
+
+	respond(c, map[string]any{
+		"err":  fmt.Sprintf("%v", err),
+		"data": results,
+	})
+}
+
+func UserIndex(c *gin.Context) {
+	params, perPageParam, pageParam, orderByParam, orderParam := getParams(c, "id", "ASC")
+	var err error
+	var perPage, page, skip, total int
+	var uArr []users.User
+	var user users.User
+
+	url := c.Request.URL.Path + fmt.Sprintf("?order=%s&orderBy=%s&perPage=%s&page=", orderParam, orderByParam, perPageParam)
+	filters := utilities.GetFilters(c, params)
+
+	perPage, err = strconv.Atoi(perPageParam)
+
+	if err == nil {
+		page, err = strconv.Atoi(pageParam)
+		skip = (page - 1) * perPage
+	}
+
+	if err == nil {
+		uArr, err = user.Get(filters.ToSql(), orderParam, orderByParam, skip, perPage)
+	}
+
+	if err == nil {
+		total, err = user.Count(filters.ToSql())
+	}
+
+	totalPages := int(math.Ceil(float64(total) / float64(perPage)))
+	links := getPaginationLinks(totalPages, page, url, filters)
+
+	results := utilities.PaginatedResults[users.User]{
+		Items:      uArr,
 		Filters:    filters,
 		PerPage:    perPage,
 		TotalPages: totalPages,
