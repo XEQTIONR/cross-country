@@ -11,16 +11,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var dbString string = "root:strong_password@tcp(127.0.0.1:3306)/use_me_db"
+var dbString string = db.GetDBString()
 
 type User struct {
-	Id           int64   `json:"id"`
-	Name         string  `json:"name" gorm:"index;size:256"`
-	PasswordHash string  `binding:"required" gorm:"size:256"`
-	Email        string  `json:"email" gorm:"size:256"`
-	Admin        bool    `json:"admin"`
-	CreatedAt    *string `json:"created_at"`
-	UpdatedAt    *string `json:"updated_at"`
+	Id        int64   `json:"id"`
+	Name      string  `json:"name" gorm:"index;size:256"`
+	Password  string  `binding:"required" gorm:"size:256"`
+	Email     string  `json:"email" gorm:"size:256"`
+	Admin     bool    `json:"admin"`
+	CreatedAt *string `json:"created_at"`
+	UpdatedAt *string `json:"updated_at"`
 }
 
 func (u User) hashPassword(password string) (string, error) {
@@ -30,7 +30,7 @@ func (u User) hashPassword(password string) (string, error) {
 
 // CheckPasswordHash compares a password to a hash and returns if it is valid or not.
 func (u User) CheckPasswordHash(password string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(password))
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	return err == nil
 }
 
@@ -38,7 +38,7 @@ func (u *User) SetPassword(password string) error {
 	hash, err := u.hashPassword(password)
 
 	if err == nil {
-		u.PasswordHash = hash
+		u.Password = hash
 	}
 
 	return err
@@ -47,15 +47,19 @@ func (u *User) SetPassword(password string) error {
 func (u *User) Save() error {
 	if db, err := sql.Open("mysql", dbString); err == nil {
 		defer db.Close()
+		fmt.Printf("%v\n", u)
+		sql := fmt.Sprintf(`
+		INSERT INTO users(name, email, password, created_at, updated_at)
+		VALUE('%s', '%s', '%s', NOW(), NOW())`, u.Name, u.Email, u.Password)
+
+		fmt.Println(sql)
 		if insert, err := db.ExecContext(
-			context.Background(), fmt.Sprintf(`
-			INSERT INTO users(name, email, password_hash, created_at, updated_at)
-			VALUE('%s', '%s', '%s', NOW(), NOW())`, u.Name, u.Email, u.PasswordHash)); err == nil {
+			context.Background(), sql); err == nil {
 			if id, err := insert.LastInsertId(); err == nil {
 				if results, err := db.Query(fmt.Sprintf(`
 					SELECT id, name, email, created_at, updated_at 
 					FROM users 
-					WHERE id=%v AND deleted_at IS NULL
+					WHERE id=%v
 					LIMIT 1`, id)); err == nil {
 					results.Next()
 					return results.Scan(&u.Id, &u.Name, &u.Email, &u.CreatedAt, &u.UpdatedAt) // scan error or nil
@@ -79,13 +83,13 @@ func FindByUsername(username string) User {
 	if err == nil {
 		defer db.Close()
 		if results, err := db.Query(fmt.Sprintf(`
-			SELECT id, name, email, admin, password_hash, created_at, updated_at
+			SELECT id, name, email, admin, password, created_at, updated_at
 			FROM users
-			WHERE email = '%s' AND deleted_at IS NULL
+			WHERE email = '%s'
 			LIMIT 1
 		`, username)); err == nil {
 			results.Next()
-			results.Scan(&u.Id, &u.Name, &u.Email, &u.Admin, &u.PasswordHash, &u.CreatedAt, &u.UpdatedAt)
+			results.Scan(&u.Id, &u.Name, &u.Email, &u.Admin, &u.Password, &u.CreatedAt, &u.UpdatedAt)
 		}
 	}
 	return u
@@ -105,7 +109,7 @@ func (user User) Get(where, order, orderBy string, offset, limit int) ([]User, e
 		} else {
 			query = "SELECT id, name, email, admin, created_at, updated_at FROM users " + where + " ORDER BY " + orderBy + " " + order + " LIMIT " + strconv.Itoa(limit) + " OFFSET " + strconv.Itoa(offset)
 		}
-		fmt.Println(query)
+
 		if rows, err := database.Query(query); err != nil {
 			return nil, err
 		} else {

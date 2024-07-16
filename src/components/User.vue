@@ -1,14 +1,16 @@
 <template>
     <dl>
         <dt>User:</dt>
-        <dd>{{ username ?? 'None' }}</dd>
+        <dd>{{ name ?? 'None' }}</dd>
+        <dd>{{ email ?? 'None' }}</dd>
     </dl>
 </template>
 
 <script>
 export default {
     props: {
-        username: String
+        email: String,
+        name: String
     }
 }
 </script>

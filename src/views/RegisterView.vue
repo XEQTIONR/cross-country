@@ -1,8 +1,8 @@
 <template>
     <AppHeader />
     <form>        
-        <label>Username</label>
-        <input v-model="registerForm.username" />
+        <label>Name</label>
+        <input v-model="registerForm.name" />
         <label>Email</label>
         <input type="email" v-model="registerForm.email"  />
         <label>Password</label>
@@ -28,7 +28,7 @@ export default {
             pageData: null,
             errs: null,
             registerForm: {
-                username: "",
+                name: "",
                 email: "",
                 password: "",
                 confirmPassword: ""

@@ -26,7 +26,7 @@ type Person struct {
 	Age  int    `json:"age"`
 }
 
-const userkey = "user"
+const userkey = "id"
 
 func createMyRender() multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
@@ -71,7 +71,7 @@ func status(c *gin.Context) {
 }
 
 type authCreds struct {
-	Username string `json:"username" binding:"required"`
+	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
@@ -80,36 +80,39 @@ func login(c *gin.Context) {
 		creds        authCreds
 		session      sessions.Session = sessions.Default(c)
 		acceptHeader string           = c.Request.Header.Get("Accept")
-		username     string           = ""
+		email        string           = ""
 		password     string           = ""
 	)
 
 	if strings.Contains(acceptHeader, "application/json") {
 		c.BindJSON(&creds)
-		username = creds.Username
+		email = creds.Email
 		password = creds.Password
 	} else {
-		username = c.PostForm("username")
+		email = c.PostForm("email")
 		password = c.PostForm("password")
 
 	}
 
 	// Validate form input
-	if strings.Trim(username, " ") == "" || strings.Trim(password, " ") == "" {
+	if strings.Trim(email, " ") == "" || strings.Trim(password, " ") == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"errors": "Parameters can't be empty"})
 		return
 	}
 
 	// Check for username and password match, usually from a database
-	user := users.FindByUsername(username)
+	user := users.FindByUsername(email)
 
+	fmt.Printf("user: %v, email: %v\n", user, email)
 	to := session.Get("to")
 	toStr, ok := to.(string)
 
 	if user.Id > 0 {
 		if user.CheckPasswordHash(password) {
 			session.Delete("to")
-			session.Set(userkey, user.Email) // In real world usage you'd set this to the users ID
+			session.Set(userkey, user.Id)
+			session.Set("email", user.Email)
+			session.Set("name", user.Name)
 			if err := session.Save(); err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"errors": "Failed to save session in login"})
 				return
@@ -167,6 +170,8 @@ func logout(c *gin.Context) {
 	}
 
 	session.Delete(userkey)
+	session.Delete("email")
+	session.Delete("name")
 
 	if err := session.Save(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"errors": "Failed to save session"})
@@ -180,6 +185,7 @@ func register(c *gin.Context) {
 		Password        string `binding:"required"`
 		ConfirmPassword string `binding:"required"`
 		Email           string `json:"email"`
+		Name            string `json:"name"`
 	}
 
 	var (
@@ -187,23 +193,25 @@ func register(c *gin.Context) {
 		password        string
 		confirmPassword string
 		email           string
+		name            string
 		acceptHeader    string = c.Request.Header.Get("Accept")
 	)
 
 	if strings.Contains(acceptHeader, "application/json") {
 		c.BindJSON(&credentials)
-		email = credentials.Email
 		password = credentials.Password
 		confirmPassword = credentials.ConfirmPassword
 		email = credentials.Email
+		name = credentials.Name
 	} else {
 		password = c.PostForm("password")
 		confirmPassword = c.PostForm("confirmPassword")
 		email = c.PostForm("email")
+		name = c.PostForm("name")
 	}
 
 	if password == confirmPassword {
-		user := users.User{Email: email}
+		user := users.User{Email: email, Name: name}
 		if err := user.SetPassword(password); err != nil {
 			fmt.Printf("Error setting password: %v\n", err)
 		}
@@ -337,6 +345,18 @@ func main() {
 			}
 		})
 		r.POST("/register", register)
+
+		r.GET("/test", func(c *gin.Context) {
+			session := sessions.Default(c)
+			user := session.Get(userkey)
+			to := session.Get("to")
+			errors := session.Get("errors")
+			c.JSON(http.StatusOK, gin.H{
+				"user":   user,
+				"to":     to,
+				"errors": errors,
+			})
+		})
 
 		private := r.Group("/private")
 		private.Use(AuthRequired)

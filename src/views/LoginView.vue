@@ -18,8 +18,8 @@
 
         <input type="hidden" name="csrf_token" :value="csrf_token" />
 
-        <label>Username</label>
-        <input class="bg-gray-100" v-model="auth.username" type="text" name="username" />
+        <label>Email</label>
+        <input class="bg-gray-100" v-model="auth.email" type="text" name="email" />
 
         <label>Password</label>
         <input class="bg-gray-100" v-model="auth.password" type="password" name="password" />
@@ -52,7 +52,7 @@ export default {
             pageData: null,
             errs: null,
             auth: {
-                username: "",
+                email: "",
                 password: ""
             }
         }
