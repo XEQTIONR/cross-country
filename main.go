@@ -36,26 +36,6 @@ func createMyRender() multitemplate.Renderer {
 	return r
 }
 
-func AuthRequired(c *gin.Context) {
-	session := sessions.Default(c)
-	user := session.Get(userkey)
-
-	if user == nil {
-		acceptHeader := c.Request.Header.Get("Accept")
-
-		session.Set("to", c.Request.RequestURI)
-		session.Save()
-
-		if strings.Contains(acceptHeader, "application/json") {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"errors": "unauthorized"})
-		} else {
-			c.Redirect(http.StatusTemporaryRedirect, "/login")
-		}
-	}
-
-	c.Next()
-}
-
 // me is the handler that will return the user information stored in the
 // session.
 func me(c *gin.Context) {
@@ -258,7 +238,7 @@ func main() {
 		r.Static("/dist", "dist")
 		r.StaticFile("/favicon.ico", "public/favicon.ico")
 		r.Use(sessions.Sessions("XSRF-TOKEN", cookie.NewStore(secret)))
-		r.Use(middleware.CheckCSRFToken())
+		r.Use(middleware.CheckCSRFToken)
 
 		r.HTMLRender = createMyRender()
 
@@ -282,7 +262,16 @@ func main() {
 
 		r.GET("/tyres", controllers.TyreIndex)
 
-		r.GET("/users", controllers.UserIndex)
+		admin := r.Group("")
+
+		admin.Use(middleware.Authorized)
+		{
+			admin.GET("/users", controllers.UserIndex)
+		}
+
+		r.GET("/unauthorized", func(c *gin.Context) {
+			respond(c, map[string]any{})
+		})
 
 		r.GET("/", func(c *gin.Context) {
 			session := sessions.Default(c)
@@ -326,6 +315,7 @@ func main() {
 				respond(c, map[string]any{"user": user, "to": to, "errors": errors})
 			}
 		})
+
 		r.POST("/login", login)
 
 		r.POST("logout", logout)
@@ -359,7 +349,7 @@ func main() {
 		})
 
 		private := r.Group("/private")
-		private.Use(AuthRequired)
+		private.Use(middleware.Authenticated)
 		{
 			private.GET("/me", me)
 			private.GET("/status", status)

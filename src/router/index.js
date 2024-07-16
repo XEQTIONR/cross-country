@@ -13,6 +13,7 @@ import PaymentsView from '@/views/PaymentsView.vue'
 import StockView from '@/views/StockView.vue'
 import BankAccountsView from '@/views/BankAccountsView.vue'
 import UsersView from '@/views/UsersView.vue'
+import UnauthorizedView from '@/views/UnauthorizedView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,6 +108,11 @@ const router = createRouter({
       path: '/payments',
       name: 'payments.index',
       component: PaymentsView
+    },
+    {
+      path: '/unauthorized',
+      name: 'unauthorized',
+      component: UnauthorizedView
     },
   ]
 })
