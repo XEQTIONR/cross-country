@@ -14,6 +14,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func handleErrorResponse[E utilities.Entity](c *gin.Context, err error, data utilities.PaginatedResults[E]) {
+	if err == nil {
+		respond(c, map[string]any{
+			"err":  nil,
+			"data": data,
+		})
+
+		return
+	} else {
+		respond(c, map[string]any{
+			"err":  fmt.Sprintf("%v", err),
+			"data": data,
+		})
+	}
+}
+
 func respond(c *gin.Context, data map[string]any) {
 	acceptHeader := c.Request.Header.Get("Accept")
 
@@ -89,19 +105,7 @@ func BankAccountIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func ConsignmentIndex(c *gin.Context) {
@@ -144,19 +148,7 @@ func ConsignmentIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func ContainerIndex(c *gin.Context) {
@@ -199,19 +191,7 @@ func ContainerIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func CustomerIndex(c *gin.Context) {
@@ -257,19 +237,7 @@ func CustomerIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func LcIndex(c *gin.Context) {
@@ -312,19 +280,7 @@ func LcIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func OrderIndex(c *gin.Context) {
@@ -367,19 +323,7 @@ func OrderIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func PaymentIndex(c *gin.Context) {
@@ -422,19 +366,7 @@ func PaymentIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func TyreIndex(c *gin.Context) {
@@ -477,19 +409,7 @@ func TyreIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func StockIndex(c *gin.Context) {
@@ -532,19 +452,7 @@ func StockIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
 
 func UserIndex(c *gin.Context) {
@@ -587,17 +495,5 @@ func UserIndex(c *gin.Context) {
 		Order:      orderParam,
 	}
 
-	if err == nil {
-		respond(c, map[string]any{
-			"err":  nil,
-			"data": results,
-		})
-
-		return
-	}
-
-	respond(c, map[string]any{
-		"err":  fmt.Sprintf("%v", err),
-		"data": results,
-	})
+	handleErrorResponse(c, err, results)
 }
